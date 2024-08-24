@@ -1,10 +1,7 @@
 package com.manumb.digital_money_service.presentation.controllers;
 
 import com.manumb.digital_money_service.business.users.UserService;
-import com.manumb.digital_money_service.business.users.dto.RequestChangePasswordUser;
-import com.manumb.digital_money_service.business.users.dto.RequestConfirmEmailUser;
-import com.manumb.digital_money_service.business.users.dto.RequestEmailUser;
-import com.manumb.digital_money_service.business.users.dto.RequestRegisterNewUser;
+import com.manumb.digital_money_service.business.users.dto.*;
 import com.manumb.digital_money_service.orchestrator.users.UserUseCaseOrchestrator;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.mail.MessagingException;
@@ -26,9 +23,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<String> registerNewUser(@RequestBody RequestRegisterNewUser ownerUserData) throws MessagingException, IOException {
-        userUseCaseOrchestrator.register(ownerUserData);
-        return ResponseEntity.ok("User successfully registered");
+    ResponseEntity<ResponseRegisterNewUser> registerNewUser(@RequestBody RequestRegisterNewUser ownerUserData) throws MessagingException, IOException {
+        ResponseRegisterNewUser response = userUseCaseOrchestrator.register(ownerUserData);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")

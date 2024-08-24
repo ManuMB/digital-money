@@ -72,7 +72,7 @@ public class AuthUseCaseHandler implements AuthUseCaseOrchestrator {
         String authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("DM-")) {
-            return ResponseEntity.badRequest().body("Invalid token or no token provided");
+            return ResponseEntity.internalServerError().body("Invalid token or no token provided");
         }
 
         // Remove "Bearer " prefix from the token

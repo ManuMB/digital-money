@@ -6,6 +6,7 @@ import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.business.users.UserService;
 import com.manumb.digital_money_service.business.users.dto.RequestChangePasswordUser;
 import com.manumb.digital_money_service.business.users.dto.RequestRegisterNewUser;
+import com.manumb.digital_money_service.business.users.dto.ResponseRegisterNewUser;
 import com.manumb.digital_money_service.business.users.mappers.UserMapper;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Component;
@@ -30,12 +31,20 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator{
 
 
     @Override
-    public void register(RequestRegisterNewUser userData) throws MessagingException, IOException {
+    public ResponseRegisterNewUser register(RequestRegisterNewUser userData) throws MessagingException, IOException {
         var user = userMapper.toUser(userData);
         userService.saveUser(user);
 
         String token = jwtService.generateEmailToken(user);
         //sendEmail.sendConfirmationEmail(user.getFullName(), user.getEmail(), token);
+        return new ResponseRegisterNewUser(
+                user.getFullName(),
+                user.getEmail(),
+                user.getDni(),
+                user.getPhoneNumber(),
+                user.getCvu(),
+                user.getAlias()
+        );
     }
 
     @Override
