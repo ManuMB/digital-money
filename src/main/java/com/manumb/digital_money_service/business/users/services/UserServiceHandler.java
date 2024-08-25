@@ -1,5 +1,6 @@
 package com.manumb.digital_money_service.business.users.services;
 
+import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import com.manumb.digital_money_service.business.users.User;
@@ -45,7 +46,32 @@ public class UserServiceHandler implements UserService, UserDetailsService {
         user.setAlias(generateUniqueAlias());
         var hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
+
+        Account account = new Account();
+        account.setBalance(0.0);
+        user.setAccount(account);
+        account.setUser(user);
+
         userSqlRepository.save(user);
+    }
+
+    @Override
+    public void updateUser(Long id, String fullName, String dni, String email, String phoneNumber) throws BadRequestException {
+        // Check if the user exists by ID first
+        User existingUser = userSqlRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+
+        // Now check if the DNI or email already exist, but exclude the current user from the check
+        if (userSqlRepository.existsByDni(dni) && !existingUser.getDni().equals(dni)) {
+            throw new BadRequestException("DNI " + dni + " already in use");
+        }
+
+        if (userSqlRepository.existsByEmail(email) && !existingUser.getEmail().equals(email)) {
+            throw new BadRequestException("Email " + email + " already in use");
+        }
+
+        // If everything is fine, update the user
+        userSqlRepository.updateUser(id, fullName, dni, email, phoneNumber);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.manumb.digital_money_service.business.users;
 
+import com.manumb.digital_money_service.business.accounts.Account;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -40,6 +41,10 @@ public class User implements UserDetails {
 
     private Boolean enabled = false;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
+
     public User() {
     }
 
@@ -78,6 +83,13 @@ public class User implements UserDetails {
         this.cvu = cvu;
         this.alias = alias;
         this.password = password;
+    }
+
+    public User(String fullName, String dni, String email, String phoneNumber) {
+        this.fullName = fullName;
+        this.dni = dni;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
@@ -138,6 +150,14 @@ public class User implements UserDetails {
 
     public void setAlias(String alias) {
         this.alias = alias;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     @Override

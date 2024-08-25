@@ -4,9 +4,7 @@ import com.manumb.digital_money_service.business.email.SendEmail;
 import com.manumb.digital_money_service.business.jwt.JwtService;
 import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.business.users.UserService;
-import com.manumb.digital_money_service.business.users.dto.RequestChangePasswordUser;
-import com.manumb.digital_money_service.business.users.dto.RequestRegisterNewUser;
-import com.manumb.digital_money_service.business.users.dto.ResponseRegisterNewUser;
+import com.manumb.digital_money_service.business.users.dto.*;
 import com.manumb.digital_money_service.business.users.mappers.UserMapper;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Component;
@@ -18,21 +16,21 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator{
     private final UserService userService;
     private final JwtService jwtService;
     //private final SendEmail sendEmail;
-    private final UserMapper<RequestRegisterNewUser> userMapper;
+    private final UserMapper<RequestRegisterNewUser> registerUserMapper;
 
 
-    public UserUseCaseHandler(UserService userService, JwtService jwtService, UserMapper<RequestRegisterNewUser> userMapper) {
+    public UserUseCaseHandler(UserService userService, JwtService jwtService, UserMapper<RequestRegisterNewUser> registerUserMapper) {
         this.userService = userService;
         this.jwtService = jwtService;
         //this.sendEmail = sendEmail;
-        this.userMapper = userMapper;
+        this.registerUserMapper = registerUserMapper;
     }
 
 
 
     @Override
     public ResponseRegisterNewUser register(RequestRegisterNewUser userData) throws MessagingException, IOException {
-        var user = userMapper.toUser(userData);
+        var user = registerUserMapper.toUser(userData);
         userService.saveUser(user);
 
         String token = jwtService.generateEmailToken(user);
@@ -48,8 +46,34 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator{
     }
 
     @Override
+    public ResponseUpdateUser update(Long id, RequestUpdateUser userData) throws IOException {
+        userService.updateUser(id, userData.fullName(), userData.dni(), userData.email(), userData.phoneNumber());
+
+        User user = userService.findById(id);
+        return new ResponseUpdateUser(
+                user.getFullName(),
+                user.getDni(),
+                user.getEmail(),
+                user.getPhoneNumber()
+        );
+    }
+
+    @Override
     public void deleteUser(Long id) {
         userService.deleteUser(id);
+    }
+
+    @Override
+    public ResponseGetUser getUser(Long id) {
+        User user = userService.findById(id);
+        return new ResponseGetUser(
+                user.getFullName(),
+                user.getDni(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getCvu(),
+                user.getAlias()
+        );
     }
 
     @Override

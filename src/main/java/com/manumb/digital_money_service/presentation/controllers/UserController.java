@@ -28,10 +28,22 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("/{id}")
+    ResponseEntity<ResponseUpdateUser> updateUser(@PathVariable Long id, @RequestBody RequestUpdateUser requestUpdateUser) throws IOException {
+        ResponseUpdateUser response = userUseCaseOrchestrator.update(id, requestUpdateUser);
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteOwnerUser(@PathVariable Long id){
+    ResponseEntity<String> deleteUser(@PathVariable Long id){
         userUseCaseOrchestrator.deleteUser(id);
-        return ResponseEntity.ok("Owner user successfully deleted");
+        return ResponseEntity.ok("User successfully deleted");
+    }
+
+    @GetMapping("{id}")
+    ResponseEntity<ResponseGetUser> getUser(@PathVariable Long id){
+        ResponseGetUser response = userUseCaseOrchestrator.getUser(id);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/recover-password")
