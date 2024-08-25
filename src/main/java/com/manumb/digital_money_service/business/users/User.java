@@ -41,10 +41,6 @@ public class User implements UserDetails {
 
     private Boolean enabled = false;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private Account account;
-
     public User() {
     }
 
@@ -152,13 +148,6 @@ public class User implements UserDetails {
         this.alias = alias;
     }
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

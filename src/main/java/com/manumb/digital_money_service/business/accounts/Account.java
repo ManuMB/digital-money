@@ -1,7 +1,10 @@
 package com.manumb.digital_money_service.business.accounts;
 
+import com.manumb.digital_money_service.business.accounts.cards.Card;
 import com.manumb.digital_money_service.business.users.User;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "Accounts")
@@ -11,12 +14,19 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double balance;
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
+
 
     public Account(Long id, Double balance) {
         this.id = id;
         this.balance = balance;
+    }
+
+    public Account(Long id, Double balance, Long userId) {
+        this.id = id;
+        this.balance = balance;
+        this.userId = userId;
     }
 
     public Account() {
@@ -30,11 +40,11 @@ public class Account {
         this.balance = balance;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
