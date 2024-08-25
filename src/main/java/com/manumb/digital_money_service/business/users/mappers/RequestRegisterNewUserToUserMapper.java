@@ -10,11 +10,11 @@ public class RequestRegisterNewUserToUserMapper implements UserMapper<RequestReg
     public User toUser(RequestRegisterNewUser toBeMapped) {
         return new User(
                 toBeMapped.fullName(),
-                toBeMapped.email(),
                 toBeMapped.dni(),
+                toBeMapped.email(),
                 toBeMapped.phoneNumber(),
-                toBeMapped.cvu(),
-                toBeMapped.alias(),
+                null,
+                null,
                 toBeMapped.password()
         );
     }

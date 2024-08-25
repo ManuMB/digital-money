@@ -43,11 +43,9 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
     })
     @PostMapping("/login")
-    public ResponseEntity<?> login (
-            @RequestBody RequestUserLogin requestUserLogin
-    )  throws Exception {
+    public ResponseEntity<ResponseUserLogin> login (@RequestBody RequestUserLogin requestUserLogin){
             var response = authUseCaseOrchestrator.userLogin(requestUserLogin);
-                return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
     }
 
     @Operation(

@@ -5,17 +5,26 @@ import com.manumb.digital_money_service.business.security.exception.UserNotFound
 import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.business.users.UserService;
 import com.manumb.digital_money_service.persistence.UserSqlRepository;
+import org.apache.coyote.BadRequestException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.util.List;
+import java.util.Random;
+
 @Service
 public class UserServiceHandler implements UserService, UserDetailsService {
 
     private final UserSqlRepository userSqlRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Random random = new SecureRandom();
 
     public UserServiceHandler(UserSqlRepository userSqlRepository, PasswordEncoder passwordEncoder) {
         this.userSqlRepository = userSqlRepository;
@@ -23,7 +32,17 @@ public class UserServiceHandler implements UserService, UserDetailsService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public void saveUser(User user) throws IOException {
+        if (userSqlRepository.existsByEmail(user.getEmail())) {
+            throw new BadRequestException("Email already exists");
+        }
+
+        if (userSqlRepository.existsByDni(user.getDni())) {
+            throw new BadRequestException("DNI already exists");
+        }
+
+        user.setCvu(generateUniqueCVU());
+        user.setAlias(generateUniqueAlias());
         var hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         userSqlRepository.save(user);
@@ -36,6 +55,15 @@ public class UserServiceHandler implements UserService, UserDetailsService {
             return userOptional.get();
         }
         throw new UserNotFoundException("user " + email + " not found");
+    }
+
+    @Override
+    public User findByDni(String dni) {
+        var userOptional = userSqlRepository.findByDni(dni);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        }
+        throw new UserNotFoundException("user " + dni + " not found");
     }
 
     @Override
@@ -66,5 +94,36 @@ public class UserServiceHandler implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return findByEmail(username);
+    }
+
+    private String generateUniqueCVU() {
+        String cvu;
+        do {
+            cvu = generateRandomCVU();
+        } while (userSqlRepository.existsByCvu(cvu));
+        return cvu;
+    }
+
+    private String generateRandomCVU() {
+        StringBuilder cvu = new StringBuilder(22);
+        for (int i = 0; i < 22; i++) {
+            cvu.append(random.nextInt(10));
+        }
+        return cvu.toString();
+    }
+
+    private String generateUniqueAlias() throws IOException {
+        String alias;
+        do {
+            alias = generateRandomAlias();
+        } while (userSqlRepository.existsByAlias(alias));
+        return alias;
+    }
+
+    private String generateRandomAlias() throws IOException {
+        List<String> words = Files.readAllLines(Paths.get("src/main/java/com/manumb/digital_money_service/business/users/util/alias.txt"));
+        return words.get(random.nextInt(words.size())) + "." +
+                words.get(random.nextInt(words.size())) + "." +
+                words.get(random.nextInt(words.size()));
     }
 }

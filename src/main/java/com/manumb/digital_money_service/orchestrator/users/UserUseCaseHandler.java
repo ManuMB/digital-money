@@ -39,8 +39,8 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator{
         //sendEmail.sendConfirmationEmail(user.getFullName(), user.getEmail(), token);
         return new ResponseRegisterNewUser(
                 user.getFullName(),
-                user.getEmail(),
                 user.getDni(),
+                user.getEmail(),
                 user.getPhoneNumber(),
                 user.getCvu(),
                 user.getAlias()

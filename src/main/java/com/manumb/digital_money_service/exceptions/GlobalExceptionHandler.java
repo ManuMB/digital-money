@@ -2,6 +2,7 @@ package com.manumb.digital_money_service.exceptions;
 
 import com.manumb.digital_money_service.business.security.exception.IncorrectPasswordException;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
+import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -30,5 +31,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGenericException(Exception ex) {
         logger.error("Unexpected error: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequestException(BadRequestException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or dni already exist");
     }
 }
