@@ -17,6 +17,13 @@ public class Account {
     @Column(name = "user_id")
     private Long userId;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    private List<Card> cards;
+
 
     public Account(Long id, Double balance) {
         this.id = id;

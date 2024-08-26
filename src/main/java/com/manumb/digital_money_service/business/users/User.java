@@ -41,6 +41,9 @@ public class User implements UserDetails {
 
     private Boolean enabled = false;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Account account;
+
     public User() {
     }
 

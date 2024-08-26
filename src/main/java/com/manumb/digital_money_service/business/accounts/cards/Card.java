@@ -25,6 +25,10 @@ public class Card {
 
     private Long accountId;
 
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
     public Card() {
     }
 
