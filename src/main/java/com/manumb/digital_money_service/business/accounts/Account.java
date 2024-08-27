@@ -14,29 +14,27 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double balance;
-    @Column(name = "user_id")
-    private Long userId;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Card> cards;
 
+
+    public Account() {
+    }
 
     public Account(Long id, Double balance) {
         this.id = id;
         this.balance = balance;
     }
 
-    public Account(Long id, Double balance, Long userId) {
+    public Account(Long id, Double balance, User user, List<Card> cards) {
         this.id = id;
         this.balance = balance;
-        this.userId = userId;
-    }
-
-    public Account() {
+        this.user = user;
+        this.cards = cards;
     }
 
     public Double getBalance() {
@@ -47,11 +45,19 @@ public class Account {
         this.balance = balance;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 }

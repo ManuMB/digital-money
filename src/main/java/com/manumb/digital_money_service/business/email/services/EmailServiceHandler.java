@@ -1,18 +1,6 @@
 package com.manumb.digital_money_service.business.email.services;
 
-import com.manumb.digital_money_service.business.email.SendEmail;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-        /*
+/*
 @Service
 @EnableAsync
 public class EmailServiceHandler implements SendEmail {

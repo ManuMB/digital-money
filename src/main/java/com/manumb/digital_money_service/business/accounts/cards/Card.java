@@ -23,8 +23,6 @@ public class Card {
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
 
-    private Long accountId;
-
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
@@ -32,21 +30,21 @@ public class Card {
     public Card() {
     }
 
-    public Card(String cardHolder, String cardNumber, String cvv, LocalDate expirationDate, Long accountId) {
-        this.cardHolder = cardHolder;
-        this.cardNumber = cardNumber;
-        this.cvv = cvv;
-        this.expirationDate = expirationDate;
-        this.accountId = accountId;
-    }
-
-    public Card(Long id, String cardHolder, String cardNumber, String cvv, LocalDate expirationDate, Long accountId) {
+    public Card(Long id, String cardHolder, String cardNumber, String cvv, LocalDate expirationDate, Account account) {
         this.id = id;
         this.cardHolder = cardHolder;
         this.cardNumber = cardNumber;
         this.cvv = cvv;
         this.expirationDate = expirationDate;
-        this.accountId = accountId;
+        this.account = account;
+    }
+
+    public Card(String cardHolder, String cardNumber, String cvv, LocalDate expirationDate, Account account) {
+        this.cardHolder = cardHolder;
+        this.cardNumber = cardNumber;
+        this.cvv = cvv;
+        this.expirationDate = expirationDate;
+        this.account = account;
     }
 
     public Long getId() {
@@ -89,11 +87,11 @@ public class Card {
         this.expirationDate = expirationDate;
     }
 
-    public Long getAccountId() {
-        return accountId;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

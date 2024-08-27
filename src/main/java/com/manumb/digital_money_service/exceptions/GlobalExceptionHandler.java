@@ -1,5 +1,6 @@
 package com.manumb.digital_money_service.exceptions;
 
+import com.manumb.digital_money_service.business.exceptions.ConflictException;
 import com.manumb.digital_money_service.business.security.exception.IncorrectPasswordException;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import org.apache.coyote.BadRequestException;
@@ -36,5 +37,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<String> handleBadRequestException(BadRequestException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or dni already exist");
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<String> handleConflictException(ConflictException ex) {
+        logger.error("Conflict: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 }

@@ -3,7 +3,6 @@ package com.manumb.digital_money_service.presentation.controllers;
 import com.manumb.digital_money_service.business.users.UserService;
 import com.manumb.digital_money_service.business.users.dto.*;
 import com.manumb.digital_money_service.orchestrator.users.UserUseCaseOrchestrator;
-import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

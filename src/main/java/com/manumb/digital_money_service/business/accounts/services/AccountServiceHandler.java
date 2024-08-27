@@ -2,10 +2,11 @@ package com.manumb.digital_money_service.business.accounts.services;
 
 import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.accounts.AccountService;
-import com.manumb.digital_money_service.business.accounts.dto.ResponseGetBalanceAccount;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.persistence.AccountSqlRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AccountServiceHandler implements AccountService {
     private final AccountSqlRepository accountSqlRepository;
 

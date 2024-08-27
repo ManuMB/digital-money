@@ -1,6 +1,5 @@
 package com.manumb.digital_money_service.orchestrator.users;
 
-import com.manumb.digital_money_service.business.email.SendEmail;
 import com.manumb.digital_money_service.business.jwt.JwtService;
 import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.business.users.UserService;

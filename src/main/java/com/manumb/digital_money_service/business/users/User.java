@@ -151,6 +151,13 @@ public class User implements UserDetails {
         this.alias = alias;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,12 +1,9 @@
 package com.manumb.digital_money_service.presentation.controllers;
 
 import com.manumb.digital_money_service.business.jwt.JwtService;
-import com.manumb.digital_money_service.business.security.exception.IncorrectPasswordException;
-import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import com.manumb.digital_money_service.orchestrator.auth.AuthUseCaseOrchestrator;
 import com.manumb.digital_money_service.orchestrator.auth.dto.RequestUserLogin;
 import com.manumb.digital_money_service.orchestrator.auth.dto.ResponseUserLogin;
-import com.manumb.digital_money_service.orchestrator.auth.dto.ResponseUserLogout;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,10 +11,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")

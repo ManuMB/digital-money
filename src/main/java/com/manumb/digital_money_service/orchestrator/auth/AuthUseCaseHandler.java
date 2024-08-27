@@ -2,17 +2,14 @@ package com.manumb.digital_money_service.orchestrator.auth;
 
 import com.manumb.digital_money_service.business.jwt.JwtService;
 import com.manumb.digital_money_service.business.security.exception.IncorrectPasswordException;
-import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import com.manumb.digital_money_service.business.users.UserService;
 import com.manumb.digital_money_service.orchestrator.auth.dto.RequestUserLogin;
 import com.manumb.digital_money_service.orchestrator.auth.dto.ResponseUserLogin;
-import com.manumb.digital_money_service.orchestrator.auth.dto.ResponseUserLogout;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
