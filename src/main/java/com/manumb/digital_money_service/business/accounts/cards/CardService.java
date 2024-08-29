@@ -4,6 +4,7 @@ import java.util.List;
 
 public interface CardService {
     void createCard(Long accountId, Card card);
-    Card findById(Long id);
-    List<Card> findAllCards();
+    Card findByCardId(Long cardId, Long accountId);
+    List<Card> findAllCardsByAccountId(Long accountId);
+    void deleteCard(Long cardId);
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface CardUseCaseOrchestrator {
     ResponseRegisterNewCard createCard(Long accountId, RequestRegisterNewCard requestRegisterNewCard);
-    ResponseGetCard getCardById(Long id);
-    List<Card> getAllCards();
+    ResponseGetCard getCardById(Long cardId, Long accountId);
+    void deleteCardById(Long cardId, Long accountId);
+    List<ResponseGetCard> getAllCardsByAcountId(Long accountId);
 }

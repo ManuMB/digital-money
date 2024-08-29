@@ -1,11 +1,15 @@
 package com.manumb.digital_money_service.presentation.controllers;
 
 import com.manumb.digital_money_service.business.accounts.cards.dto.RequestRegisterNewCard;
+import com.manumb.digital_money_service.business.accounts.cards.dto.ResponseGetCard;
 import com.manumb.digital_money_service.business.exceptions.ConflictException;
+import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.orchestrator.accounts.cards.CardUseCaseOrchestrator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts/{accountId}/cards")
@@ -26,5 +30,31 @@ public class CardController {
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body("Error creating card");
             }
+        }
+
+        @GetMapping("/{id}")
+        public ResponseEntity<ResponseGetCard> getCardById(@PathVariable Long accountId, @PathVariable Long id) {
+            try {
+                ResponseGetCard response = cardUseCaseOrchestrator.getCardById(id, accountId);
+                return ResponseEntity.ok(response);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+        }
+
+        @GetMapping
+        public ResponseEntity<?> getCardsByAccountId(@PathVariable Long accountId) {
+            List<ResponseGetCard> cards = cardUseCaseOrchestrator.getAllCardsByAcountId(accountId);
+            if (cards.isEmpty()) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.ok(cards);
+            }
+        }
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<String> deleteCardById(@PathVariable Long accountId, @PathVariable Long id) {
+            cardUseCaseOrchestrator.deleteCardById(id, accountId);
+            return ResponseEntity.ok("Card deleted successfully");
         }
 }

@@ -40,13 +40,21 @@ public class CardServiceHandler implements CardService {
     }
 
     @Override
-    public Card findById(Long id) {
-        return cardSqlRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Card with id " + id + " not found"));
+    public Card findByCardId(Long cardId, Long accountId) {
+        return cardSqlRepository.findByIdAndAccountId(cardId, accountId)
+                .orElseThrow(() -> new NotFoundException("Card with id " + cardId + " not found for account " + accountId));
+    }
+
+
+    @Override
+    public List<Card> findAllCardsByAccountId(Long accountId) {
+        return cardSqlRepository.findByAccountId(accountId);
     }
 
     @Override
-    public List<Card> findAllCards() {
-        return cardSqlRepository.findAll();
+    public void deleteCard(Long cardId) {
+        cardSqlRepository.deleteById(cardId);
     }
+
+
 }

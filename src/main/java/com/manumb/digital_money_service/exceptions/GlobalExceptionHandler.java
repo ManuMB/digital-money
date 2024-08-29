@@ -1,6 +1,7 @@
 package com.manumb.digital_money_service.exceptions;
 
 import com.manumb.digital_money_service.business.exceptions.ConflictException;
+import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.security.exception.IncorrectPasswordException;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import org.apache.coyote.BadRequestException;
@@ -18,6 +19,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+        logger.error("User not found: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
         logger.error("User not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }

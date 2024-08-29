@@ -8,6 +8,7 @@ import com.manumb.digital_money_service.business.accounts.cards.dto.ResponseRegi
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CardUseCaseHandler implements CardUseCaseOrchestrator{
@@ -35,8 +36,8 @@ public class CardUseCaseHandler implements CardUseCaseOrchestrator{
     }
 
     @Override
-    public ResponseGetCard getCardById(Long id) {
-        Card card = cardService.findById(id);
+    public ResponseGetCard getCardById(Long cardId, Long accountId) {
+        Card card = cardService.findByCardId(cardId, accountId);
         return new ResponseGetCard(
                 card.getCardHolder(),
                 card.getCardNumber(),
@@ -46,7 +47,23 @@ public class CardUseCaseHandler implements CardUseCaseOrchestrator{
     }
 
     @Override
-    public List<Card> getAllCards() {
-        return cardService.findAllCards();
+    public void deleteCardById(Long cardId, Long accountId) {
+        Card card = cardService.findByCardId(cardId, accountId);
+        cardService.deleteCard(cardId);
     }
+
+    @Override
+    public List<ResponseGetCard> getAllCardsByAcountId(Long accountId) {
+        List<Card> cards = cardService.findAllCardsByAccountId(accountId);
+        return cards.stream()
+                .map(card -> new ResponseGetCard(
+                        card.getCardHolder(),
+                        card.getCardNumber(),
+                        card.getCvv(),
+                        card.getExpirationDate()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
 }
