@@ -15,6 +15,12 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+    @ManyToOne
+    @JoinColumn(name = "sender_account_id")
+    private Account senderAccount;
+    @ManyToOne
+    @JoinColumn(name = "receiver_account_id")
+    private Account receiverAccount;
     private Double amount;
     private LocalDateTime transactionDate;
 
@@ -28,9 +34,16 @@ public class Transaction {
         this.transactionDate = transactionDate;
     }
 
-    public Transaction(Long id, Account account, Double amount, LocalDateTime transactionDate) {
+    public Transaction(Account senderAccount, Account receiverAccount) {
+        this.senderAccount = senderAccount;
+        this.receiverAccount = receiverAccount;
+    }
+
+    public Transaction(Long id, Account account, Account senderAccount, Account receiverAccount, Double amount, LocalDateTime transactionDate) {
         this.id = id;
         this.account = account;
+        this.senderAccount = senderAccount;
+        this.receiverAccount = receiverAccount;
         this.amount = amount;
         this.transactionDate = transactionDate;
     }
@@ -49,6 +62,22 @@ public class Transaction {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Account getSenderAccount() {
+        return senderAccount;
+    }
+
+    public void setSenderAccount(Account senderAccount) {
+        this.senderAccount = senderAccount;
+    }
+
+    public Account getReceiverAccount() {
+        return receiverAccount;
+    }
+
+    public void setReceiverAccount(Account receiverAccount) {
+        this.receiverAccount = receiverAccount;
     }
 
     public Double getAmount() {

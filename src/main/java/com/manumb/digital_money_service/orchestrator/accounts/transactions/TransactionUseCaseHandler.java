@@ -17,13 +17,33 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
     }
 
     @Override
-    public List<ResponseGetTransaction> getLastTransactionsForAccount(Long accountId) {
-        List<Transaction> transactions = transactionService.getLastTransactionsForAccount(accountId);
+    public List<ResponseGetTransaction> getLastFiveTransactionsForAccount(Long accountId) {
+        List<Transaction> transactions = transactionService.findLastFiveTransactionsForAccount(accountId);
         return transactions.stream()
                 .map(transaction -> new ResponseGetTransaction(
                         transaction.getAmount(),
                         transaction.getTransactionDate()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ResponseGetTransaction> getAllTransactionsForAccount(Long accountId) {
+        List<Transaction> transactions = transactionService.findAllTransactionsForAccount(accountId);
+        return transactions.stream()
+                .map(transaction -> new ResponseGetTransaction(
+                        transaction.getAmount(),
+                        transaction.getTransactionDate()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ResponseGetTransaction getTransactionById(Long id, Long accountId) {
+        Transaction transaction = transactionService.findTransactionById(id, accountId);
+        return new ResponseGetTransaction(
+                transaction.getAmount(),
+                transaction.getTransactionDate()
+        );
     }
 }
