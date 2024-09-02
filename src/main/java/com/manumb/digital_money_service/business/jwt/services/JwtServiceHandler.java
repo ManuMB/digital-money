@@ -1,10 +1,19 @@
 package com.manumb.digital_money_service.business.jwt.services;
 
+import com.manumb.digital_money_service.business.accounts.Account;
+import com.manumb.digital_money_service.business.accounts.AccountService;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
+import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.jwt.JsonWebToken;
 import com.manumb.digital_money_service.business.jwt.JwtService;
+import com.manumb.digital_money_service.business.users.User;
+import com.manumb.digital_money_service.business.users.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,6 +26,11 @@ import java.util.Set;
 
 @Service
 public class JwtServiceHandler implements JwtService {
+    private final AccountService accountService;
+
+    public JwtServiceHandler(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @Value("${jwt.secret_key}")
     private String SECRET_KEY;
@@ -70,6 +84,20 @@ public class JwtServiceHandler implements JwtService {
     public void invalidateToken(String token) {
         tokenBlacklist.add(token);
         SecurityContextHolder.clearContext();
+    }
+
+    @Override
+    public ResponseEntity<?> verifyAuthorization(Authentication authentication, Long accountId) {
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            String email = ((User) authentication.getPrincipal()).getEmail();
+            Account account = accountService.findById(accountId);
+            if (!account.getUser().getEmail().equals(email)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            } else {
+                return null; // Return null to indicate successful authorization
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Unauthorized if no authentication or principal is not a User
     }
 
     // Check if the token is invalidated

@@ -13,9 +13,6 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
-    @ManyToOne
     @JoinColumn(name = "sender_account_id")
     private Account senderAccount;
     @ManyToOne
@@ -23,15 +20,17 @@ public class Transaction {
     private Account receiverAccount;
     private Double amount;
     private LocalDateTime transactionDate;
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
 
 
     public Transaction() {
     }
 
-    public Transaction(Account account, Double amount, LocalDateTime transactionDate) {
-        this.account = account;
+    public Transaction(Double amount, LocalDateTime transactionDate, TransactionType transactionType) {
         this.amount = amount;
         this.transactionDate = transactionDate;
+        this.transactionType = transactionType;
     }
 
     public Transaction(Account senderAccount, Account receiverAccount) {
@@ -39,13 +38,13 @@ public class Transaction {
         this.receiverAccount = receiverAccount;
     }
 
-    public Transaction(Long id, Account account, Account senderAccount, Account receiverAccount, Double amount, LocalDateTime transactionDate) {
+    public Transaction(Long id, Account senderAccount, Account receiverAccount, Double amount, LocalDateTime transactionDate, TransactionType transactionType) {
         this.id = id;
-        this.account = account;
         this.senderAccount = senderAccount;
         this.receiverAccount = receiverAccount;
         this.amount = amount;
         this.transactionDate = transactionDate;
+        this.transactionType = transactionType;
     }
 
     public Long getId() {
@@ -54,14 +53,6 @@ public class Transaction {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     public Account getSenderAccount() {
@@ -94,5 +85,13 @@ public class Transaction {
 
     public void setTransactionDate(LocalDateTime transactionDate) {
         this.transactionDate = transactionDate;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
     }
 }

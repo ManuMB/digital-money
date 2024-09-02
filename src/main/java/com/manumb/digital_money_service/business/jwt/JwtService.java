@@ -1,6 +1,8 @@
 package com.manumb.digital_money_service.business.jwt;
 
 import com.manumb.digital_money_service.business.users.User;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +16,7 @@ public interface JwtService {
     String generateEmailToken(UserDetails user);
     JsonWebToken generateToken(Map<String, Object> extraClaims, UserDetails user);
     void invalidateToken(String token);
+    ResponseEntity<?> verifyAuthorization(Authentication authentication, Long accountId);
 
     default Map<String,Object> generateExtraClaimsOfUser(User user){
 

@@ -53,15 +53,10 @@ public class AccountController {
     @GetMapping("/{accountId}/activity/{transactionId}")
     public ResponseEntity<ResponseGetTransaction> getTransactionById(@PathVariable Long accountId, @PathVariable Long transactionId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            String email = ((User) authentication.getPrincipal()).getEmail();
-
-            Account account = accountService.findById(accountId);
-            if (!account.getUser().getEmail().equals(email)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
-
+        ResponseEntity<?> authorizationResponse = jwtService.verifyAuthorization(authentication, accountId);
+        if (authorizationResponse != null) { // Check if authorization failed
+            return (ResponseEntity<ResponseGetTransaction>) authorizationResponse; // Cast to the correct type
+        }
             try {
                 ResponseGetTransaction transaction = transactionUseCaseOrchestrator.getTransactionById(transactionId, accountId);
                 return ResponseEntity.ok(transaction);
@@ -69,10 +64,6 @@ public class AccountController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
     }
 }
