@@ -39,8 +39,8 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
     }
 
     @Override
-    public ResponseGetTransaction getTransactionById(Long id, Long accountId) {
-        Transaction transaction = transactionService.findTransactionById(id, accountId);
+    public ResponseGetTransaction getTransactionById(Long id) {
+        Transaction transaction = transactionService.findTransactionById(id);
         return new ResponseGetTransaction(
                 transaction.getAmount(),
                 transaction.getTransactionDate()

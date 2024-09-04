@@ -5,5 +5,5 @@ import java.util.List;
 public interface TransactionService {
     List<Transaction> findLastFiveTransactionsForAccount(Long accountId);
     List<Transaction> findAllTransactionsForAccount(Long accountId);
-    Transaction findTransactionById(Long id, Long accountId);
+    Transaction findTransactionById(Long id);
 }

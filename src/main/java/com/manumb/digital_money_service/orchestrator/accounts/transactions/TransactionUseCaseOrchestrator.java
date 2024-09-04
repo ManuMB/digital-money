@@ -7,5 +7,5 @@ import java.util.List;
 public interface TransactionUseCaseOrchestrator {
     List<ResponseGetTransaction> getLastFiveTransactionsForAccount(Long accountId);
     List<ResponseGetTransaction> getAllTransactionsForAccount(Long accountId);
-    ResponseGetTransaction getTransactionById(Long id, Long accountId);
+    ResponseGetTransaction getTransactionById(Long id);
 }

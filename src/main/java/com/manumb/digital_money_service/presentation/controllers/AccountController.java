@@ -58,7 +58,7 @@ public class AccountController {
             return (ResponseEntity<ResponseGetTransaction>) authorizationResponse; // Cast to the correct type
         }
             try {
-                ResponseGetTransaction transaction = transactionUseCaseOrchestrator.getTransactionById(transactionId, accountId);
+                ResponseGetTransaction transaction = transactionUseCaseOrchestrator.getTransactionById(transactionId);
                 return ResponseEntity.ok(transaction);
             } catch (NotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

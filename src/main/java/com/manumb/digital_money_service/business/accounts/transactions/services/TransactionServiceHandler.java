@@ -18,17 +18,17 @@ public class TransactionServiceHandler implements TransactionService {
 
     @Override
     public List<Transaction> findLastFiveTransactionsForAccount(Long accountId) {
-        return transactionSqlRepository.findTop5ByAccountIdOrderByTransactionDateDesc(accountId);
+        return transactionSqlRepository.findLastFiveByAccountId(accountId);
     }
 
     @Override
     public List<Transaction> findAllTransactionsForAccount(Long accountId) {
-        return transactionSqlRepository.findByAccountIdOrderByTransactionDateDesc(accountId);
+        return transactionSqlRepository.findAllByAccountIdOrderByTransactionDateDesc(accountId);
     }
 
     @Override
-    public Transaction findTransactionById(Long id, Long accountId) {
-        return transactionSqlRepository.findByIdAndAccountId(id, accountId)
-            .orElseThrow(() -> new NotFoundException("Card with id " + id + " for account id " + accountId + " not found"));
+    public Transaction findTransactionById(Long id) {
+        return transactionSqlRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Card with id " + id + " not found"));
     }
 }

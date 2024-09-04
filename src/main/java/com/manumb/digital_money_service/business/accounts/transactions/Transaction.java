@@ -13,11 +13,11 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "sender_account_id")
-    private Account senderAccount;
+    @JoinColumn(name = "from_account_id")
+    private Account fromAccount;
     @ManyToOne
-    @JoinColumn(name = "receiver_account_id")
-    private Account receiverAccount;
+    @JoinColumn(name = "to_account_id")
+    private Account toAccount;
     private Double amount;
     private LocalDateTime transactionDate;
     @Enumerated(EnumType.STRING)
@@ -33,15 +33,15 @@ public class Transaction {
         this.transactionType = transactionType;
     }
 
-    public Transaction(Account senderAccount, Account receiverAccount) {
-        this.senderAccount = senderAccount;
-        this.receiverAccount = receiverAccount;
+    public Transaction(Account fromAccount, Account toAccount) {
+        this.fromAccount = fromAccount;
+        this.toAccount = toAccount;
     }
 
-    public Transaction(Long id, Account senderAccount, Account receiverAccount, Double amount, LocalDateTime transactionDate, TransactionType transactionType) {
+    public Transaction(Long id, Account fromAccount, Account toAccount, Double amount, LocalDateTime transactionDate, TransactionType transactionType) {
         this.id = id;
-        this.senderAccount = senderAccount;
-        this.receiverAccount = receiverAccount;
+        this.fromAccount = fromAccount;
+        this.toAccount = toAccount;
         this.amount = amount;
         this.transactionDate = transactionDate;
         this.transactionType = transactionType;
@@ -55,20 +55,20 @@ public class Transaction {
         this.id = id;
     }
 
-    public Account getSenderAccount() {
-        return senderAccount;
+    public Account getFromAccount() {
+        return fromAccount;
     }
 
-    public void setSenderAccount(Account senderAccount) {
-        this.senderAccount = senderAccount;
+    public void setFromAccount(Account fromAccount) {
+        this.fromAccount = fromAccount;
     }
 
-    public Account getReceiverAccount() {
-        return receiverAccount;
+    public Account getToAccount() {
+        return toAccount;
     }
 
-    public void setReceiverAccount(Account receiverAccount) {
-        this.receiverAccount = receiverAccount;
+    public void setToAccount(Account toAccount) {
+        this.toAccount = toAccount;
     }
 
     public Double getAmount() {
