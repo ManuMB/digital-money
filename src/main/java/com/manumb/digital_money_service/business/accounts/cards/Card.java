@@ -14,15 +14,11 @@ public class Card {
     private Long id;
     @Column(name = "card_holder")
     private String cardHolder;
-
     @Column(name = "card_number")
     private String cardNumber;
-
     private String cvv;
-
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
-
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;

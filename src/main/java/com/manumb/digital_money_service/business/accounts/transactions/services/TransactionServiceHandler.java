@@ -17,6 +17,11 @@ public class TransactionServiceHandler implements TransactionService {
     }
 
     @Override
+    public void saveTransaction(Transaction transaction) {
+        transactionSqlRepository.save(transaction);
+    }
+
+    @Override
     public List<Transaction> findLastFiveTransactionsForAccount(Long accountId) {
         return transactionSqlRepository.findLastFiveByAccountId(accountId);
     }

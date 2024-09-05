@@ -3,6 +3,8 @@ package com.manumb.digital_money_service.presentation.controllers;
 import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.accounts.AccountService;
 import com.manumb.digital_money_service.business.accounts.dto.ResponseGetBalanceAccount;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewCardDepositTransaction;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransaction;
 import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.jwt.JwtService;
@@ -30,6 +32,12 @@ public class AccountController {
         this.accountUseCaseOrchestrator = accountUseCaseOrchestrator;
         this.transactionUseCaseOrchestrator = transactionUseCaseOrchestrator;
         this.jwtService = jwtService;
+    }
+
+    @PostMapping("/{accountId}/transactions")
+    public ResponseEntity<String> cardDeposit(@PathVariable Long accountId, @RequestBody RequestCreateNewCardDepositTransaction request) {
+            transactionUseCaseOrchestrator.createCardDepositTransaction(accountId, request);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Deposit successful");
     }
 
     @GetMapping("/{id}")

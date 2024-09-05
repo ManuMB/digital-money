@@ -16,8 +16,18 @@ public class AccountServiceHandler implements AccountService {
 
 
     @Override
+    public void saveAccount(Account account) {
+        accountSqlRepository.save(account);
+    }
+
+    @Override
     public Account findById(Long id) {
         return accountSqlRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Account with id " + id + " not found"));
+    }
+
+    @Override
+    public void updateBalance(Long accountId, Double newBalance) {
+        accountSqlRepository.updateBalance(accountId, newBalance);
     }
 }
