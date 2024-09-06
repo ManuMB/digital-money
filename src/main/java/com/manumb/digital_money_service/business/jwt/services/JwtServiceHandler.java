@@ -2,12 +2,9 @@ package com.manumb.digital_money_service.business.jwt.services;
 
 import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.accounts.AccountService;
-import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
-import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.jwt.JsonWebToken;
 import com.manumb.digital_money_service.business.jwt.JwtService;
 import com.manumb.digital_money_service.business.users.User;
-import com.manumb.digital_money_service.business.users.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;

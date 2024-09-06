@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface AccountSqlRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByUserId(Long userId);
+    @Query("SELECT a FROM Account a WHERE a.alias = :identifier OR a.cvu = :identifier")
+    Optional<Account> findByAliasOrCvu(String identifier);
     @Modifying
     @Transactional
     @Query("UPDATE Account a SET a.balance = :newBalance WHERE a.id = :accountId")

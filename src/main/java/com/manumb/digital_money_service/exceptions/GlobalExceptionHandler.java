@@ -1,5 +1,7 @@
 package com.manumb.digital_money_service.exceptions;
 
+import com.manumb.digital_money_service.business.accounts.cards.exception.CardNotFoundException;
+import com.manumb.digital_money_service.business.accounts.transactions.exception.InsufficientBalanceException;
 import com.manumb.digital_money_service.business.exceptions.ConflictException;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.security.exception.IncorrectPasswordException;
@@ -50,5 +52,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleConflictException(ConflictException ex) {
         logger.error("Conflict: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CardNotFoundException.class)
+    public ResponseEntity<String> handleCardNotFoundException(CardNotFoundException ex){
+        logger.error("Card not found: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<String> handleInsufficientBalanceException(InsufficientBalanceException ex){
+        logger.error("Insufficient account balance: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.GONE).body(ex.getMessage());
     }
 }

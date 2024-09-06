@@ -3,7 +3,6 @@ package com.manumb.digital_money_service.presentation.controllers;
 import com.manumb.digital_money_service.business.accounts.cards.dto.RequestRegisterNewCard;
 import com.manumb.digital_money_service.business.accounts.cards.dto.ResponseGetCard;
 import com.manumb.digital_money_service.business.exceptions.ConflictException;
-import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.orchestrator.accounts.cards.CardUseCaseOrchestrator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

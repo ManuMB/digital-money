@@ -45,6 +45,10 @@ public class CardServiceHandler implements CardService {
                 .orElseThrow(() -> new NotFoundException("Card with id " + cardId + " not found for account " + accountId));
     }
 
+    @Override
+    public boolean isFoundByCardNumberAndAccountId(String cardNumber, Long accountId) {
+        return cardSqlRepository.existsByCardNumberAndAccountId(cardNumber, accountId);
+    }
 
     @Override
     public List<Card> findAllCardsByAccountId(Long accountId) {

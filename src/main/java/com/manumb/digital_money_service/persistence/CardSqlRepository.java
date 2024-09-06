@@ -11,6 +11,7 @@ public interface CardSqlRepository extends JpaRepository<Card, Long> {
     Optional<Card> findByIdAndAccountId(Long id, Long accountId);
     List<Card> findByAccountId(Long accountId);
     void deleteById(Long id);
+    boolean existsByCardNumberAndAccountId(String cardNumber, Long accountId);
     boolean existsByCardNumberAndAccountIdNot(String cardNumber, Long accountId);
     boolean existsByCardHolderAndCardNumberAndCvvAndExpirationDateAndAccountId(String cardHolder, String cardNumber, String cvv, LocalDate expirationDate, Long accountId);
 }

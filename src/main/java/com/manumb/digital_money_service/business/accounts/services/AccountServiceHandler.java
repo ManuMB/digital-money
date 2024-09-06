@@ -27,6 +27,12 @@ public class AccountServiceHandler implements AccountService {
     }
 
     @Override
+    public Account findByAliasOrCvu(String identifier) {
+        return accountSqlRepository.findByAliasOrCvu(identifier)
+                .orElseThrow(() -> new NotFoundException("Account not found"));
+    }
+
+    @Override
     public void updateBalance(Long accountId, Double newBalance) {
         accountSqlRepository.updateBalance(accountId, newBalance);
     }

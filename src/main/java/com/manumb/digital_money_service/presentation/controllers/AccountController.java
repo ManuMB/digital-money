@@ -1,14 +1,12 @@
 package com.manumb.digital_money_service.presentation.controllers;
 
-import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.accounts.AccountService;
 import com.manumb.digital_money_service.business.accounts.dto.ResponseGetBalanceAccount;
 import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewCardDepositTransaction;
-import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransaction;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransferTransaction;
 import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.jwt.JwtService;
-import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.orchestrator.accounts.AccountUseCaseOrchestrator;
 import com.manumb.digital_money_service.orchestrator.accounts.transactions.TransactionUseCaseOrchestrator;
 import org.springframework.http.HttpStatus;
@@ -35,9 +33,15 @@ public class AccountController {
     }
 
     @PostMapping("/{accountId}/transactions")
+    public ResponseEntity<String> accountTransfer(@PathVariable Long accountId, @RequestBody RequestCreateNewTransferTransaction request){
+        transactionUseCaseOrchestrator.createTransferTransaction(accountId, request);
+        return ResponseEntity.status(HttpStatus.OK).body("Transfer successful");
+    }
+
+    @PostMapping("/{accountId}/transactions")
     public ResponseEntity<String> cardDeposit(@PathVariable Long accountId, @RequestBody RequestCreateNewCardDepositTransaction request) {
-            transactionUseCaseOrchestrator.createCardDepositTransaction(accountId, request);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Deposit successful");
+        transactionUseCaseOrchestrator.createCardDepositTransaction(accountId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Deposit successful");
     }
 
     @GetMapping("/{id}")
