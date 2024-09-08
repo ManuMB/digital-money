@@ -4,13 +4,19 @@ import com.manumb.digital_money_service.business.accounts.cards.Card;
 import com.manumb.digital_money_service.business.accounts.transactions.Transaction;
 import com.manumb.digital_money_service.business.users.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "accounts")
-@Getter @Setter @AllArgsConstructor @RequiredArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class Account {
 
     @Id

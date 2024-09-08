@@ -1,7 +1,6 @@
 package com.manumb.digital_money_service.business.users.services;
 
 import com.manumb.digital_money_service.business.accounts.Account;
-import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.business.users.UserService;

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class AccountUseCaseHandler implements AccountUseCaseOrchestrator{
+public class AccountUseCaseHandler implements AccountUseCaseOrchestrator {
 
     private final AccountService accountService;
 

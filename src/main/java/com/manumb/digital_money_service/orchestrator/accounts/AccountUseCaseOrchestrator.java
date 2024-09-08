@@ -6,6 +6,8 @@ import com.manumb.digital_money_service.business.accounts.dto.ResponseGetBalance
 
 public interface AccountUseCaseOrchestrator {
     void updateAlias(Long id, RequestUpdateAccountInfo request);
+
     ResponseGetAccountInfo getAccountInfo(Long id);
+
     ResponseGetBalanceAccount getBalance(Long id);
 }

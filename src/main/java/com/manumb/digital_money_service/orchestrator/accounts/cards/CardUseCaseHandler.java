@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
-public class CardUseCaseHandler implements CardUseCaseOrchestrator{
+public class CardUseCaseHandler implements CardUseCaseOrchestrator {
     private final CardService cardService;
 
     @Override

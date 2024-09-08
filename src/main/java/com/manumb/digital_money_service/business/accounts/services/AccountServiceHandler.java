@@ -3,7 +3,6 @@ package com.manumb.digital_money_service.business.accounts.services;
 import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.accounts.AccountService;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
-import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import com.manumb.digital_money_service.persistence.AccountSqlRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

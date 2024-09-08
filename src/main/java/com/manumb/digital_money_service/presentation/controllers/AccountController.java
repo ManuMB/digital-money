@@ -11,6 +11,8 @@ import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.jwt.JwtService;
 import com.manumb.digital_money_service.orchestrator.accounts.AccountUseCaseOrchestrator;
 import com.manumb.digital_money_service.orchestrator.accounts.transactions.TransactionUseCaseOrchestrator;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,21 +23,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
+@Tag(name = "Accounts", description = "API para cuentas bancarias")
+@AllArgsConstructor
 public class AccountController {
+
     private final AccountService accountService;
     private final AccountUseCaseOrchestrator accountUseCaseOrchestrator;
     private final TransactionUseCaseOrchestrator transactionUseCaseOrchestrator;
     private final JwtService jwtService;
 
-    public AccountController(AccountService accountService, AccountUseCaseOrchestrator accountUseCaseOrchestrator, TransactionUseCaseOrchestrator transactionUseCaseOrchestrator, JwtService jwtService) {
-        this.accountService = accountService;
-        this.accountUseCaseOrchestrator = accountUseCaseOrchestrator;
-        this.transactionUseCaseOrchestrator = transactionUseCaseOrchestrator;
-        this.jwtService = jwtService;
-    }
 
     @PostMapping("/{accountId}/transfer")
-    public ResponseEntity<String> accountTransfer(@PathVariable Long accountId, @RequestBody RequestCreateNewTransferTransaction request){
+    public ResponseEntity<String> accountTransfer(@PathVariable Long accountId, @RequestBody RequestCreateNewTransferTransaction request) {
         transactionUseCaseOrchestrator.createTransferTransaction(accountId, request);
         return ResponseEntity.status(HttpStatus.OK).body("Transfer successful");
     }
@@ -47,13 +46,13 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<ResponseGetAccountInfo> getAccountInfo(@PathVariable Long accountId){
-        ResponseGetAccountInfo response  = accountUseCaseOrchestrator.getAccountInfo(accountId);
+    public ResponseEntity<ResponseGetAccountInfo> getAccountInfo(@PathVariable Long accountId) {
+        ResponseGetAccountInfo response = accountUseCaseOrchestrator.getAccountInfo(accountId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{accountId}/balance")
-    public ResponseEntity<ResponseGetBalanceAccount> getAccountBalance(@PathVariable Long accountId){
+    public ResponseEntity<ResponseGetBalanceAccount> getAccountBalance(@PathVariable Long accountId) {
         ResponseGetBalanceAccount response = accountUseCaseOrchestrator.getBalance(accountId);
         return ResponseEntity.ok(response);
     }
@@ -65,7 +64,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}/activity")
-    public ResponseEntity<List<ResponseGetTransaction>> getAllTransactionsForAccount(@PathVariable Long accountId){
+    public ResponseEntity<List<ResponseGetTransaction>> getAllTransactionsForAccount(@PathVariable Long accountId) {
         List<ResponseGetTransaction> transactions = transactionUseCaseOrchestrator.getAllTransactionsForAccount(accountId);
         return ResponseEntity.ok(transactions);
     }
@@ -77,18 +76,18 @@ public class AccountController {
         if (authorizationResponse != null) { // Check if authorization failed
             return (ResponseEntity<ResponseGetTransaction>) authorizationResponse; // Cast to the correct type
         }
-            try {
-                ResponseGetTransaction transaction = transactionUseCaseOrchestrator.getTransactionById(transactionId);
-                return ResponseEntity.ok(transaction);
-            } catch (NotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
+        try {
+            ResponseGetTransaction transaction = transactionUseCaseOrchestrator.getTransactionById(transactionId);
+            return ResponseEntity.ok(transaction);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PatchMapping("/{accountId}")
-    public ResponseEntity<String> updateAccountInfo(@PathVariable Long accountId, @RequestBody RequestUpdateAccountInfo request){
+    public ResponseEntity<String> updateAccountInfo(@PathVariable Long accountId, @RequestBody RequestUpdateAccountInfo request) {
         accountUseCaseOrchestrator.updateAlias(accountId, request);
         return ResponseEntity.status(HttpStatus.OK).body("Account alias updated successfully");
     }

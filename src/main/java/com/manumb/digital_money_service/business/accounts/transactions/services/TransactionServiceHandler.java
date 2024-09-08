@@ -26,12 +26,12 @@ public class TransactionServiceHandler implements TransactionService {
 
     @Override
     public List<Transaction> findAllTransactionsForAccount(Long accountId) {
-        return transactionSqlRepository.findAllByAccountIdOrderByTransactionDateDesc(accountId);
+        return transactionSqlRepository.findAllTransactionsByAccountId(accountId);
     }
 
     @Override
     public Transaction findTransactionById(Long id) {
         return transactionSqlRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Transaction with id " + id + " not found"));
+                .orElseThrow(() -> new NotFoundException("Transaction with id " + id + " not found"));
     }
 }

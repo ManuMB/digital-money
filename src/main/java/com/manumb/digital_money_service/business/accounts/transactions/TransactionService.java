@@ -4,7 +4,10 @@ import java.util.List;
 
 public interface TransactionService {
     void saveTransaction(Transaction transaction);
+
     List<Transaction> findLastFiveTransactionsForAccount(Long accountId);
+
     List<Transaction> findAllTransactionsForAccount(Long accountId);
+
     Transaction findTransactionById(Long id);
 }

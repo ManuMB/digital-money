@@ -8,8 +8,12 @@ import java.util.List;
 
 public interface TransactionUseCaseOrchestrator {
     void createTransferTransaction(Long accountId, RequestCreateNewTransferTransaction request);
+
     void createCardDepositTransaction(Long accountId, RequestCreateNewCardDepositTransaction request);
+
     List<ResponseGetTransaction> getLastFiveTransactionsForAccount(Long accountId);
+
     List<ResponseGetTransaction> getAllTransactionsForAccount(Long accountId);
+
     ResponseGetTransaction getTransactionById(Long id);
 }

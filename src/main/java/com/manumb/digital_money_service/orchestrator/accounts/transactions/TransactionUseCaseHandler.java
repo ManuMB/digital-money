@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
-public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator{
+public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator {
     private final TransactionService transactionService;
     private final AccountService accountService;
     private final CardService cardService;
@@ -51,7 +51,7 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
     @Override
     public void createCardDepositTransaction(Long accountId, RequestCreateNewCardDepositTransaction request) {
         Account account = accountService.findById(accountId);
-        if(!cardService.isFoundByCardNumberAndAccountId(request.cardNumber(), accountId)){
+        if (!cardService.isFoundByCardNumberAndAccountId(request.cardNumber(), accountId)) {
             throw new CardNotFoundException("Card with number: " + request.cardNumber() + " for user with id: " + accountId + " not found.");
         }
 
@@ -72,6 +72,11 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
         return transactions.stream()
                 .map(transaction -> new ResponseGetTransaction(
                         transaction.getAmount(),
+                        transaction.getTransactionType(),
+                        transaction.getFromAccount().getUser().getFullName(),
+                        transaction.getFromAccount().getCvu(),
+                        transaction.getToAccount().getUser().getFullName(),
+                        transaction.getToAccount().getCvu(),
                         transaction.getTransactionDate()
                 ))
                 .collect(Collectors.toList());
@@ -83,6 +88,11 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
         return transactions.stream()
                 .map(transaction -> new ResponseGetTransaction(
                         transaction.getAmount(),
+                        transaction.getTransactionType(),
+                        transaction.getFromAccount().getUser().getFullName(),
+                        transaction.getFromAccount().getCvu(),
+                        transaction.getToAccount().getUser().getFullName(),
+                        transaction.getToAccount().getCvu(),
                         transaction.getTransactionDate()
                 ))
                 .collect(Collectors.toList());
@@ -93,6 +103,11 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
         Transaction transaction = transactionService.findTransactionById(id);
         return new ResponseGetTransaction(
                 transaction.getAmount(),
+                transaction.getTransactionType(),
+                transaction.getFromAccount().getUser().getFullName(),
+                transaction.getFromAccount().getCvu(),
+                transaction.getToAccount().getUser().getFullName(),
+                transaction.getToAccount().getCvu(),
                 transaction.getTransactionDate()
         );
     }

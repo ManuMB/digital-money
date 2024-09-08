@@ -35,8 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //if don´t exist a 'Bearer token' or already there is an Authentication instance (already authenticated user) in the security context
         //continue the filter chain without valid
         String authorizationHeader = request.getHeader("Authorization");
-        if(!Strings.hasText(authorizationHeader) || !authorizationHeader.startsWith(secretWord) || SecurityContextHolder.getContext().getAuthentication() != null){
-            filterChain.doFilter(request,response);
+        if (!Strings.hasText(authorizationHeader) || !authorizationHeader.startsWith(secretWord) || SecurityContextHolder.getContext().getAuthentication() != null) {
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -50,8 +50,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String username = jwtServiceHandler.extractUsername(jwt);
-        if(username == null){
-            filterChain.doFilter(request,response);
+        if (username == null) {
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -61,11 +61,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         var user = userService.findByEmail(username);
 
         //create an Authentication object, set additional details from request and update security context with the new 'principal'
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         authenticationToken.setDetails(new WebAuthenticationDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         //continue filter chain
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }

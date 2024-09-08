@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,15 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Auth", description = "API para autenticación de usuarios")
+@AllArgsConstructor
 public class AuthController {
 
     private final AuthUseCaseOrchestrator authUseCaseOrchestrator;
     private final JwtService jwtService;
 
-    public AuthController(AuthUseCaseOrchestrator authUseCaseOrchestrator, JwtService jwtService) {
-        this.authUseCaseOrchestrator = authUseCaseOrchestrator;
-        this.jwtService = jwtService;
-    }
 
     @Operation(
             summary = "Ingresar al sistema con credenciales de usuario",
@@ -41,9 +39,9 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
     })
     @PostMapping("/login")
-    public ResponseEntity<ResponseUserLogin> login (@RequestBody RequestUserLogin requestUserLogin){
-            var response = authUseCaseOrchestrator.userLogin(requestUserLogin);
-            return ResponseEntity.ok(response);
+    public ResponseEntity<ResponseUserLogin> login(@RequestBody RequestUserLogin requestUserLogin) {
+        var response = authUseCaseOrchestrator.userLogin(requestUserLogin);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(

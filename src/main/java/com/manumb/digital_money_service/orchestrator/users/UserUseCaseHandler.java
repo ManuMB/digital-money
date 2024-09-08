@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class UserUseCaseHandler implements UserUseCaseOrchestrator{
+public class UserUseCaseHandler implements UserUseCaseOrchestrator {
     private final UserService userService;
     private final JwtService jwtService;
     //private final SendEmail sendEmail;
@@ -24,7 +24,6 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator{
         //this.sendEmail = sendEmail;
         this.registerUserMapper = registerUserMapper;
     }
-
 
 
     @Override

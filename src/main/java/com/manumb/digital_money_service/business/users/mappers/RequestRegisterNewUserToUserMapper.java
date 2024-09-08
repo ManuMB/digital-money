@@ -5,7 +5,7 @@ import com.manumb.digital_money_service.business.users.dto.RequestRegisterNewUse
 import org.springframework.stereotype.Component;
 
 @Component
-public class RequestRegisterNewUserToUserMapper implements UserMapper<RequestRegisterNewUser>{
+public class RequestRegisterNewUserToUserMapper implements UserMapper<RequestRegisterNewUser> {
     @Override
     public User toUser(RequestRegisterNewUser toBeMapped) {
         return new User(

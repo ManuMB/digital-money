@@ -3,8 +3,10 @@ package com.manumb.digital_money_service.presentation.controllers;
 import com.manumb.digital_money_service.business.users.UserService;
 import com.manumb.digital_money_service.business.users.dto.*;
 import com.manumb.digital_money_service.orchestrator.users.UserUseCaseOrchestrator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +14,12 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "Users", description = "API para cuentas de usuario")
+@AllArgsConstructor
 public class UserController {
+
     private final UserService userService;
     private final UserUseCaseOrchestrator userUseCaseOrchestrator;
-
-    public UserController(UserService userService, UserUseCaseOrchestrator userUseCaseOrchestrator) {
-        this.userService = userService;
-        this.userUseCaseOrchestrator = userUseCaseOrchestrator;
-    }
 
     @PostMapping("/register")
     ResponseEntity<ResponseRegisterNewUser> registerNewUser(@RequestBody RequestRegisterNewUser ownerUserData) throws MessagingException, IOException {
@@ -34,13 +34,13 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteUser(@PathVariable Long id){
+    ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userUseCaseOrchestrator.deleteUser(id);
         return ResponseEntity.ok("User successfully deleted");
     }
 
     @GetMapping("{id}")
-    ResponseEntity<ResponseGetUser> getUser(@PathVariable Long id){
+    ResponseEntity<ResponseGetUser> getUser(@PathVariable Long id) {
         ResponseGetUser response = userUseCaseOrchestrator.getUser(id);
         return ResponseEntity.ok(response);
     }

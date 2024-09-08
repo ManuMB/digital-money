@@ -7,5 +7,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface AuthUseCaseOrchestrator {
     ResponseUserLogin userLogin(RequestUserLogin requestUserLogin);
+
     ResponseEntity<String> userLogout(HttpServletRequest request);
 }

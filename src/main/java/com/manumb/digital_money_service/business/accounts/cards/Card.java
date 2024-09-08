@@ -2,13 +2,19 @@ package com.manumb.digital_money_service.business.accounts.cards;
 
 import com.manumb.digital_money_service.business.accounts.Account;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cards")
-@Getter @Setter @AllArgsConstructor @RequiredArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class Card {
 
     @Id

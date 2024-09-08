@@ -35,7 +35,7 @@ public class JwtServiceHandler implements JwtService {
     private Long EXPIRATION_IN_MINUTES;
     private final Set<String> tokenBlacklist = new HashSet<>();
 
-    private SecretKey generateKey(){
+    private SecretKey generateKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
@@ -50,12 +50,12 @@ public class JwtServiceHandler implements JwtService {
     }
 
     @Override
-    public JsonWebToken generateToken(Map<String, Object> extraClaims, UserDetails user){
+    public JsonWebToken generateToken(Map<String, Object> extraClaims, UserDetails user) {
         Date now = new Date(System.currentTimeMillis());
         var token = Jwts.builder()
                 .header().type("JWT").and()
                 .subject(user.getUsername())
-                .signWith(generateKey(),Jwts.SIG.HS256)
+                .signWith(generateKey(), Jwts.SIG.HS256)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + (1000L * 60 * EXPIRATION_IN_MINUTES)))
                 .claims(extraClaims)
@@ -69,7 +69,7 @@ public class JwtServiceHandler implements JwtService {
         var token = Jwts.builder()
                 .header().type("JWT").and()
                 .subject(user.getUsername())
-                .signWith(generateKey(),Jwts.SIG.HS256)
+                .signWith(generateKey(), Jwts.SIG.HS256)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + (1000L * 60 * EXPIRATION_IN_MINUTES)))
                 .compact();

@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface TransactionSqlRepository extends JpaRepository<Transaction, Long> {
     @Query("SELECT t FROM Transaction t WHERE t.fromAccount.id = :accountId OR t.toAccount.id = :accountId ORDER BY t.transactionDate DESC")
-    List<Transaction> findAllByAccountIdOrderByTransactionDateDesc(Long accountId);
+    List<Transaction> findAllTransactionsByAccountId(Long accountId);
     @Query("SELECT t FROM Transaction t WHERE t.fromAccount.id = :accountId OR t.toAccount.id = :accountId ORDER BY t.transactionDate DESC")
-    List<Transaction> findTop5ByAccountId(Long accountId, Pageable pageable);
+    List<Transaction> findTopFiveTransactionsByAccountId(Long accountId, Pageable pageable);
     default List<Transaction> findLastFiveByAccountId(Long accountId) {
-        return findTop5ByAccountId(accountId, PageRequest.of(0, 5));
+        return findTopFiveTransactionsByAccountId(accountId, PageRequest.of(0, 5));
     }
 }
