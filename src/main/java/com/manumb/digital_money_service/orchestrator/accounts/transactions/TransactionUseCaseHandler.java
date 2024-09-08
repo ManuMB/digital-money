@@ -11,6 +11,7 @@ import com.manumb.digital_money_service.business.accounts.transactions.dto.Reque
 import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransferTransaction;
 import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
 import com.manumb.digital_money_service.business.accounts.transactions.exception.InsufficientBalanceException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -18,16 +19,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@AllArgsConstructor
 public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator{
     private final TransactionService transactionService;
     private final AccountService accountService;
     private final CardService cardService;
-
-    public TransactionUseCaseHandler(TransactionService transactionService, AccountService accountService, CardService cardService) {
-        this.transactionService = transactionService;
-        this.accountService = accountService;
-        this.cardService = cardService;
-    }
 
 
     @Override
@@ -35,7 +31,7 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
         Account senderAccount = accountService.findById(accountId);
         Account receiverAccount = accountService.findByAliasOrCvu(request.destinationAccountIdentifier());
 
-        if (senderAccount.getBalance() < request.amount()) {
+        if (senderAccount.getBalance() < request.amount() || senderAccount.getBalance().equals(0.0)) {
             throw new InsufficientBalanceException("Insufficient account balance for transfer");
         }
 

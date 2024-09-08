@@ -2,6 +2,7 @@ package com.manumb.digital_money_service.business.users;
 
 import com.manumb.digital_money_service.business.accounts.Account;
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Table(name = "users")
 @Entity
+@Getter @Setter @AllArgsConstructor @RequiredArgsConstructor
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User implements UserDetails {
 
@@ -31,12 +33,6 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(unique = true)
-    private String cvu;
-
-    @Column(unique = true)
-    private String alias;
-
     private String password;
 
     private Boolean enabled = false;
@@ -44,119 +40,12 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Account account;
 
-    public User() {
-    }
-
-    public User(Long id) {
-        this.id = id;
-    }
-
-    public User(Long id, String fullName, String dni, String email, String phoneNumber, String cvu, String alias, String password) {
-        this.id = id;
+    public User(String fullName, String dni, String email, String phoneNumber, String password) {
         this.fullName = fullName;
         this.dni = dni;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.cvu = cvu;
-        this.alias = alias;
         this.password = password;
-    }
-
-    public User(Long id, String fullName, String dni, String email, String phoneNumber, String cvu, String alias, String password, Boolean enabled) {
-        this.id = id;
-        this.fullName = fullName;
-        this.dni = dni;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.cvu = cvu;
-        this.alias = alias;
-        this.password = password;
-        this.enabled = enabled;
-    }
-
-    public User(String fullName, String dni, String email, String phoneNumber, String cvu, String alias, String password) {
-        this.fullName = fullName;
-        this.dni = dni;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.cvu = cvu;
-        this.alias = alias;
-        this.password = password;
-    }
-
-    public User(String fullName, String dni, String email, String phoneNumber) {
-        this.fullName = fullName;
-        this.dni = dni;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getCvu() {
-        return cvu;
-    }
-
-    public void setCvu(String cvu) {
-        this.cvu = cvu;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     @Override
@@ -181,4 +70,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+
 }

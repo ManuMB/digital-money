@@ -5,7 +5,9 @@ import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.business.users.UserService;
+import com.manumb.digital_money_service.persistence.AccountSqlRepository;
 import com.manumb.digital_money_service.persistence.UserSqlRepository;
+import lombok.AllArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,16 +23,14 @@ import java.util.List;
 import java.util.Random;
 
 @Service
+@AllArgsConstructor
 public class UserServiceHandler implements UserService, UserDetailsService {
 
     private final UserSqlRepository userSqlRepository;
+    private final AccountSqlRepository accountSqlRepository;
     private final PasswordEncoder passwordEncoder;
     private final Random random = new SecureRandom();
 
-    public UserServiceHandler(UserSqlRepository userSqlRepository, PasswordEncoder passwordEncoder) {
-        this.userSqlRepository = userSqlRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public void saveUser(User user) throws IOException {
@@ -42,12 +42,13 @@ public class UserServiceHandler implements UserService, UserDetailsService {
             throw new BadRequestException("DNI already exists");
         }
 
-        user.setCvu(generateUniqueCVU());
-        user.setAlias(generateUniqueAlias());
+
         var hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
 
         Account account = new Account();
+        account.setCvu(generateUniqueCVU());
+        account.setAlias(generateUniqueAlias());
         account.setBalance(0.0);
         user.setAccount(account);
         account.setUser(user);
@@ -126,7 +127,7 @@ public class UserServiceHandler implements UserService, UserDetailsService {
         String cvu;
         do {
             cvu = generateRandomCVU();
-        } while (userSqlRepository.existsByCvu(cvu));
+        } while (accountSqlRepository.existsByCvu(cvu));
         return cvu;
     }
 
@@ -142,7 +143,7 @@ public class UserServiceHandler implements UserService, UserDetailsService {
         String alias;
         do {
             alias = generateRandomAlias();
-        } while (userSqlRepository.existsByAlias(alias));
+        } while (accountSqlRepository.existsByAlias(alias));
         return alias;
     }
 

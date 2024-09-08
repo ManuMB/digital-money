@@ -13,8 +13,6 @@ public class RequestRegisterNewUserToUserMapper implements UserMapper<RequestReg
                 toBeMapped.dni(),
                 toBeMapped.email(),
                 toBeMapped.phoneNumber(),
-                null,
-                null,
                 toBeMapped.password()
         );
     }

@@ -39,8 +39,8 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator{
                 user.getDni(),
                 user.getEmail(),
                 user.getPhoneNumber(),
-                user.getCvu(),
-                user.getAlias()
+                user.getAccount().getCvu(),
+                user.getAccount().getAlias()
         );
     }
 
@@ -70,8 +70,8 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator{
                 user.getDni(),
                 user.getEmail(),
                 user.getPhoneNumber(),
-                user.getCvu(),
-                user.getAlias()
+                user.getAccount().getCvu(),
+                user.getAccount().getAlias()
         );
     }
 

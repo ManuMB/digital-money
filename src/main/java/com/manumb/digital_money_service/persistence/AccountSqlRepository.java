@@ -18,4 +18,7 @@ public interface AccountSqlRepository extends JpaRepository<Account, Long> {
     @Transactional
     @Query("UPDATE Account a SET a.balance = :newBalance WHERE a.id = :accountId")
     void updateBalance(Long accountId, Double newBalance);
+
+    boolean existsByCvu(String cvu);
+    boolean existsByAlias(String alias);
 }

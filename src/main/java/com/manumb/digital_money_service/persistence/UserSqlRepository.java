@@ -36,8 +36,6 @@ public interface UserSqlRepository extends JpaRepository<User, Long> {
             "SET u.enabled = TRUE WHERE u.email = ?1")
     void enableAppUser(String email);
 
-    boolean existsByCvu(String cvu);
-    boolean existsByAlias(String alias);
     boolean existsByEmail(String email);
     boolean existsByDni(String dni);
 }

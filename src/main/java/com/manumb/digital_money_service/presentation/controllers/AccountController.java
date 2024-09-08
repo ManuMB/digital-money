@@ -32,13 +32,13 @@ public class AccountController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/{accountId}/transactions")
+    @PostMapping("/{accountId}/transfer")
     public ResponseEntity<String> accountTransfer(@PathVariable Long accountId, @RequestBody RequestCreateNewTransferTransaction request){
         transactionUseCaseOrchestrator.createTransferTransaction(accountId, request);
         return ResponseEntity.status(HttpStatus.OK).body("Transfer successful");
     }
 
-    @PostMapping("/{accountId}/transactions")
+    @PostMapping("/{accountId}/deposit")
     public ResponseEntity<String> cardDeposit(@PathVariable Long accountId, @RequestBody RequestCreateNewCardDepositTransaction request) {
         transactionUseCaseOrchestrator.createCardDepositTransaction(accountId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body("Deposit successful");
