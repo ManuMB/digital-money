@@ -77,20 +77,14 @@ public class UserServiceHandler implements UserService, UserDetailsService {
 
     @Override
     public User findByEmail(String email) {
-        var userOptional = userSqlRepository.findByEmail(email);
-        if (userOptional.isPresent()) {
-            return userOptional.get();
-        }
-        throw new UserNotFoundException("user " + email + " not found");
+        return userSqlRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
     }
 
     @Override
     public User findByDni(String dni) {
-        var userOptional = userSqlRepository.findByDni(dni);
-        if (userOptional.isPresent()) {
-            return userOptional.get();
-        }
-        throw new UserNotFoundException("user " + dni + " not found");
+        return userSqlRepository.findByDni(dni)
+                .orElseThrow(() -> new UserNotFoundException("User with dni " + dni + " not found"));
     }
 
     @Override
@@ -101,7 +95,7 @@ public class UserServiceHandler implements UserService, UserDetailsService {
     @Override
     public User findById(Long id) {
         return userSqlRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User with id " + id + " not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     @Override

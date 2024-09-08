@@ -69,9 +69,7 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator{
                 user.getFullName(),
                 user.getDni(),
                 user.getEmail(),
-                user.getPhoneNumber(),
-                user.getAccount().getCvu(),
-                user.getAccount().getAlias()
+                user.getPhoneNumber()
         );
     }
 

@@ -3,17 +3,15 @@ package com.manumb.digital_money_service.business.accounts.services;
 import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.accounts.AccountService;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
+import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import com.manumb.digital_money_service.persistence.AccountSqlRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class AccountServiceHandler implements AccountService {
     private final AccountSqlRepository accountSqlRepository;
-
-    public AccountServiceHandler(AccountSqlRepository accountSqlRepository) {
-        this.accountSqlRepository = accountSqlRepository;
-    }
-
 
     @Override
     public void saveAccount(Account account) {
@@ -35,5 +33,12 @@ public class AccountServiceHandler implements AccountService {
     @Override
     public void updateBalance(Long accountId, Double newBalance) {
         accountSqlRepository.updateBalance(accountId, newBalance);
+    }
+
+    @Override
+    public void updateAlias(Long accountId, String newAlias) {
+        Account existingAccount = accountSqlRepository.findById(accountId)
+                .orElseThrow(() -> new NotFoundException("Account with id " + accountId + " not found"));
+        accountSqlRepository.updateAlias(accountId, newAlias);
     }
 }

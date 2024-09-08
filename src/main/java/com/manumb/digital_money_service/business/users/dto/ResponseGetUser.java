@@ -4,8 +4,6 @@ public record ResponseGetUser(
         String fullName,
         String dni,
         String email,
-        String phoneNumber,
-        String cvu,
-        String alias
+        String phoneNumber
 ) {
 }

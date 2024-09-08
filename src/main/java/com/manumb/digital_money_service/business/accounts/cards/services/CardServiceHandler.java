@@ -7,19 +7,17 @@ import com.manumb.digital_money_service.business.exceptions.ConflictException;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.persistence.AccountSqlRepository;
 import com.manumb.digital_money_service.persistence.CardSqlRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CardServiceHandler implements CardService {
+
     private final CardSqlRepository cardSqlRepository;
     private final AccountSqlRepository accountSqlRepository;
-
-    public CardServiceHandler(CardSqlRepository cardSqlRepository, AccountSqlRepository accountSqlRepository) {
-        this.cardSqlRepository = cardSqlRepository;
-        this.accountSqlRepository = accountSqlRepository;
-    }
 
     @Override
     public void createCard(Long accountId, Card card) {

@@ -4,17 +4,15 @@ import com.manumb.digital_money_service.business.accounts.transactions.Transacti
 import com.manumb.digital_money_service.business.accounts.transactions.TransactionService;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.persistence.TransactionSqlRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TransactionServiceHandler implements TransactionService {
     private final TransactionSqlRepository transactionSqlRepository;
-
-    public TransactionServiceHandler(TransactionSqlRepository transactionSqlRepository) {
-        this.transactionSqlRepository = transactionSqlRepository;
-    }
 
     @Override
     public void saveTransaction(Transaction transaction) {
@@ -34,6 +32,6 @@ public class TransactionServiceHandler implements TransactionService {
     @Override
     public Transaction findTransactionById(Long id) {
         return transactionSqlRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Card with id " + id + " not found"));
+            .orElseThrow(() -> new NotFoundException("Transaction with id " + id + " not found"));
     }
 }

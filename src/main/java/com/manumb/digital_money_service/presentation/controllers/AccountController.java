@@ -1,6 +1,8 @@
 package com.manumb.digital_money_service.presentation.controllers;
 
 import com.manumb.digital_money_service.business.accounts.AccountService;
+import com.manumb.digital_money_service.business.accounts.dto.RequestUpdateAccountInfo;
+import com.manumb.digital_money_service.business.accounts.dto.ResponseGetAccountInfo;
 import com.manumb.digital_money_service.business.accounts.dto.ResponseGetBalanceAccount;
 import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewCardDepositTransaction;
 import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransferTransaction;
@@ -44,9 +46,15 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Deposit successful");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseGetBalanceAccount> getAccountBalance(@PathVariable Long id){
-        ResponseGetBalanceAccount response = accountUseCaseOrchestrator.getBalance(id);
+    @GetMapping("/{accountId}")
+    public ResponseEntity<ResponseGetAccountInfo> getAccountInfo(@PathVariable Long accountId){
+        ResponseGetAccountInfo response  = accountUseCaseOrchestrator.getAccountInfo(accountId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{accountId}/balance")
+    public ResponseEntity<ResponseGetBalanceAccount> getAccountBalance(@PathVariable Long accountId){
+        ResponseGetBalanceAccount response = accountUseCaseOrchestrator.getBalance(accountId);
         return ResponseEntity.ok(response);
     }
 
@@ -77,5 +85,11 @@ public class AccountController {
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
+    }
+
+    @PatchMapping("/{accountId}")
+    public ResponseEntity<String> updateAccountInfo(@PathVariable Long accountId, @RequestBody RequestUpdateAccountInfo request){
+        accountUseCaseOrchestrator.updateAlias(accountId, request);
+        return ResponseEntity.status(HttpStatus.OK).body("Account alias updated successfully");
     }
 }
