@@ -1,6 +1,5 @@
 package com.manumb.digital_money_service.business.accounts.transactions;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TransactionService {

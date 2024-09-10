@@ -2,8 +2,10 @@ package com.manumb.digital_money_service.exceptions;
 
 import com.manumb.digital_money_service.business.accounts.cards.exception.CardNotFoundException;
 import com.manumb.digital_money_service.business.accounts.transactions.exception.InsufficientBalanceException;
+import com.manumb.digital_money_service.business.accounts.transactions.exception.TransactionNotFoundException;
 import com.manumb.digital_money_service.business.exceptions.ConflictException;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
+import com.manumb.digital_money_service.business.security.exception.AuthorizationException;
 import com.manumb.digital_money_service.business.security.exception.IncorrectPasswordException;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import org.apache.coyote.BadRequestException;
@@ -65,4 +67,17 @@ public class GlobalExceptionHandler {
         logger.error("Insufficient account balance: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.GONE).body(ex.getMessage());
     }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<String> handleAuthorizationException(AuthorizationException ex) {
+        logger.error("Authorization failed: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<String> handleTransactionNotFoundException(TransactionNotFoundException ex) {
+        logger.error("Transaction not found: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
 }

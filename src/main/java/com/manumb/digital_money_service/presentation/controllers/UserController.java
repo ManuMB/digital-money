@@ -85,10 +85,4 @@ public class UserController {
         userUseCaseOrchestrator.enableUser(requestConfirmEmailUser.token());
         return ResponseEntity.ok("User enabled succesfully");
     }
-
-    @PostMapping("resend-email")
-    public ResponseEntity<String> resendConfirmationEmail(@RequestBody RequestEmailUser emailUser) throws MessagingException, IOException {
-        userUseCaseOrchestrator.resendConfirmationEmail(emailUser.email());
-        return ResponseEntity.ok("email forwarded successfully");
-    }
 }

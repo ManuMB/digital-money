@@ -1,8 +1,10 @@
 package com.manumb.digital_money_service.business.accounts.cards.services;
 
 import com.manumb.digital_money_service.business.accounts.Account;
+import com.manumb.digital_money_service.business.accounts.AccountService;
 import com.manumb.digital_money_service.business.accounts.cards.Card;
 import com.manumb.digital_money_service.business.accounts.cards.CardService;
+import com.manumb.digital_money_service.business.accounts.cards.exception.CardNotFoundException;
 import com.manumb.digital_money_service.business.exceptions.ConflictException;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.persistence.AccountSqlRepository;
@@ -17,7 +19,7 @@ import java.util.List;
 public class CardServiceHandler implements CardService {
 
     private final CardSqlRepository cardSqlRepository;
-    private final AccountSqlRepository accountSqlRepository;
+    private final AccountService accountService;
 
     @Override
     public void createCard(Long accountId, Card card) {
@@ -29,9 +31,7 @@ public class CardServiceHandler implements CardService {
             throw new ConflictException("A card with the same details already exists for this account");
         }
 
-        Account account = accountSqlRepository.findById(accountId)
-                .orElseThrow(() -> new NotFoundException("Account with id " + accountId + " not found"));
-
+        Account account = accountService.findById(accountId);
         card.setAccount(account);
 
         cardSqlRepository.save(card);
@@ -40,7 +40,7 @@ public class CardServiceHandler implements CardService {
     @Override
     public Card findByCardId(Long cardId, Long accountId) {
         return cardSqlRepository.findByIdAndAccountId(cardId, accountId)
-                .orElseThrow(() -> new NotFoundException("Card with id " + cardId + " not found for account " + accountId));
+                .orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found for account " + accountId));
     }
 
     @Override

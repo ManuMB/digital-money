@@ -1,6 +1,5 @@
 package com.manumb.digital_money_service.business.jwt;
 
-import com.manumb.digital_money_service.business.jwt.dto.ResponseUsernameAndFullNameDto;
 import com.manumb.digital_money_service.business.users.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,7 +20,7 @@ public interface JwtService {
 
     void invalidateToken(String token);
 
-    ResponseEntity<?> verifyAuthorization(Authentication authentication, Long accountId);
+    void verifyAuthorization(Long accountId);
 
     default Map<String, Object> generateExtraClaimsOfUser(User user) {
 

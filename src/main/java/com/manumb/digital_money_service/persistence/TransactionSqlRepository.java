@@ -1,7 +1,6 @@
 package com.manumb.digital_money_service.persistence;
 
 import com.manumb.digital_money_service.business.accounts.transactions.Transaction;
-import com.manumb.digital_money_service.business.accounts.transactions.TransactionDirection;
 import com.manumb.digital_money_service.business.accounts.transactions.TransactionType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

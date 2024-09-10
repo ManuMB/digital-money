@@ -1,15 +1,13 @@
 package com.manumb.digital_money_service.business.accounts.transactions.services;
 
 import com.manumb.digital_money_service.business.accounts.transactions.Transaction;
-import com.manumb.digital_money_service.business.accounts.transactions.TransactionDirection;
 import com.manumb.digital_money_service.business.accounts.transactions.TransactionService;
-import com.manumb.digital_money_service.business.accounts.transactions.TransactionType;
+import com.manumb.digital_money_service.business.accounts.transactions.exception.TransactionNotFoundException;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.persistence.TransactionSqlRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -35,7 +33,7 @@ public class TransactionServiceHandler implements TransactionService {
     @Override
     public Transaction findTransactionById(Long id) {
         return transactionSqlRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Transaction with id " + id + " not found"));
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction with id " + id + " not found"));
     }
 
     @Override

@@ -1,10 +1,9 @@
 package com.manumb.digital_money_service.orchestrator.accounts.transactions;
 
-import com.manumb.digital_money_service.business.accounts.transactions.TransactionDirection;
-import com.manumb.digital_money_service.business.accounts.transactions.TransactionType;
-import com.manumb.digital_money_service.business.accounts.transactions.dto.*;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewCardDepositTransaction;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransferTransaction;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TransactionUseCaseOrchestrator {

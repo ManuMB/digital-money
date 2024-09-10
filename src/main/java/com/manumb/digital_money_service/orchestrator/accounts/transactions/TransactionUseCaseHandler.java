@@ -8,7 +8,9 @@ import com.manumb.digital_money_service.business.accounts.transactions.Transacti
 import com.manumb.digital_money_service.business.accounts.transactions.TransactionDirection;
 import com.manumb.digital_money_service.business.accounts.transactions.TransactionService;
 import com.manumb.digital_money_service.business.accounts.transactions.TransactionType;
-import com.manumb.digital_money_service.business.accounts.transactions.dto.*;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewCardDepositTransaction;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransferTransaction;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
 import com.manumb.digital_money_service.business.accounts.transactions.exception.InsufficientBalanceException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
