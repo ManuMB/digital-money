@@ -8,6 +8,7 @@ import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.security.exception.AuthorizationException;
 import com.manumb.digital_money_service.business.security.exception.IncorrectPasswordException;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
+import com.manumb.digital_money_service.business.users.exception.UserExistsException;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<String> handleBadRequestException(BadRequestException ex){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or dni already exist");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(ConflictException.class)
@@ -78,6 +79,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleTransactionNotFoundException(TransactionNotFoundException ex) {
         logger.error("Transaction not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UserExistsException.class)
+    public ResponseEntity<String> handleUserExistsException(UserExistsException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or dni already exist");
     }
 
 }

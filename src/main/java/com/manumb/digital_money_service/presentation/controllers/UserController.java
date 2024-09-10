@@ -31,7 +31,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @PostMapping("/register")
-    ResponseEntity<ResponseRegisterNewUser> registerNewUser(@RequestBody RequestRegisterNewUser ownerUserData) throws MessagingException, IOException {
+    ResponseEntity<ResponseRegisterNewUser> registerNewUser(@RequestBody @Valid RequestRegisterNewUser ownerUserData) throws MessagingException, IOException {
         ResponseRegisterNewUser response = userUseCaseOrchestrator.register(ownerUserData);
         return ResponseEntity.ok(response);
     }
@@ -44,7 +44,8 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @PatchMapping("/{id}")
-    ResponseEntity<ResponseUpdateUser> updateUser(@PathVariable Long id, @RequestBody RequestUpdateUser requestUpdateUser) throws IOException {
+    ResponseEntity<ResponseUpdateUser> updateUser(@PathVariable Long id,
+                                                  @Valid @RequestBody RequestUpdateUser requestUpdateUser) throws IOException {
         ResponseUpdateUser response = userUseCaseOrchestrator.update(id, requestUpdateUser);
         return ResponseEntity.ok(response);
     }
@@ -69,19 +70,19 @@ public class UserController {
     }
 
     @PostMapping("/recover-password")
-    public ResponseEntity<String> sendRecoverPasswordEmail(@RequestBody RequestEmailUser requestEmailUser) throws MessagingException, IOException {
+    public ResponseEntity<String> sendRecoverPasswordEmail(@RequestBody @Valid RequestEmailUser requestEmailUser) throws MessagingException, IOException {
         userUseCaseOrchestrator.sendRecoverPasswordEmail(requestEmailUser.email());
         return ResponseEntity.ok("Email sent");
     }
 
     @PatchMapping(path = "modify-password")
-    public ResponseEntity<String> modifyPassword(@Valid @RequestBody RequestChangePasswordUser requestChangePasswordUser) throws Exception {
+    public ResponseEntity<String> modifyPassword(@RequestBody @Valid RequestChangePasswordUser requestChangePasswordUser) throws Exception {
         userUseCaseOrchestrator.changePassword(requestChangePasswordUser);
         return ResponseEntity.ok("Password changed successfully");
     }
 
     @PatchMapping(path = "confirm-email")
-    public ResponseEntity<String> confirmEmail(@RequestBody RequestConfirmEmailUser requestConfirmEmailUser) {
+    public ResponseEntity<String> confirmEmail(@RequestBody @Valid RequestConfirmEmailUser requestConfirmEmailUser) {
         userUseCaseOrchestrator.enableUser(requestConfirmEmailUser.token());
         return ResponseEntity.ok("User enabled succesfully");
     }

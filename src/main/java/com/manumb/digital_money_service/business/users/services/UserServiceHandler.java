@@ -4,6 +4,7 @@ import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.business.users.UserService;
+import com.manumb.digital_money_service.business.users.exception.UserExistsException;
 import com.manumb.digital_money_service.persistence.AccountSqlRepository;
 import com.manumb.digital_money_service.persistence.UserSqlRepository;
 import lombok.AllArgsConstructor;
@@ -34,11 +35,11 @@ public class UserServiceHandler implements UserService, UserDetailsService {
     @Override
     public void saveUser(User user) throws IOException {
         if (userSqlRepository.existsByEmail(user.getEmail())) {
-            throw new BadRequestException("Email already exists");
+            throw new UserExistsException("Email already exists");
         }
 
         if (userSqlRepository.existsByDni(user.getDni())) {
-            throw new BadRequestException("DNI already exists");
+            throw new UserExistsException("DNI already exists");
         }
 
 
@@ -56,18 +57,18 @@ public class UserServiceHandler implements UserService, UserDetailsService {
     }
 
     @Override
-    public void updateUser(Long id, String fullName, String dni, String email, String phoneNumber) throws BadRequestException {
+    public void updateUser(Long id, String fullName, String dni, String email, String phoneNumber){
         // Check if the user exists by ID first
         User existingUser = userSqlRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
 
         // Now check if the DNI or email already exist, but exclude the current user from the check
         if (userSqlRepository.existsByDni(dni) && !existingUser.getDni().equals(dni)) {
-            throw new BadRequestException("DNI " + dni + " already in use");
+            throw new UserExistsException("DNI " + dni + " already in use");
         }
 
         if (userSqlRepository.existsByEmail(email) && !existingUser.getEmail().equals(email)) {
-            throw new BadRequestException("Email " + email + " already in use");
+            throw new UserExistsException("Email " + email + " already in use");
         }
 
         // If everything is fine, update the user
