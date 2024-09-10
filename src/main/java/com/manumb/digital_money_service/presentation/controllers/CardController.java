@@ -4,7 +4,13 @@ import com.manumb.digital_money_service.business.accounts.cards.dto.RequestRegis
 import com.manumb.digital_money_service.business.accounts.cards.dto.ResponseGetCard;
 import com.manumb.digital_money_service.business.exceptions.ConflictException;
 import com.manumb.digital_money_service.orchestrator.accounts.cards.CardUseCaseOrchestrator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +25,15 @@ import java.util.List;
 public class CardController {
     private final CardUseCaseOrchestrator cardUseCaseOrchestrator;
 
-
+    @Operation(summary = "Registrar tarjeta")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Tarjeta asociada a otra cuenta", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)})
     @PostMapping
-    public ResponseEntity<String> createCard(@PathVariable Long accountId, @RequestBody RequestRegisterNewCard requestRegisterNewCard) {
+    public ResponseEntity<String> createCard(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+                                             @Parameter(description = "Body de la tarjeta a crear", required = true) @Valid @RequestBody RequestRegisterNewCard requestRegisterNewCard) {
         try {
             cardUseCaseOrchestrator.createCard(accountId, requestRegisterNewCard);
             return ResponseEntity.status(HttpStatus.CREATED).body("Card created successfully");
@@ -32,8 +44,15 @@ public class CardController {
         }
     }
 
+    @Operation(summary = "Obtener tarjeta",
+            description = "Obtiene una tarjeta asociada a una cuenta por id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Cuenta no encontrada", content = @Content)})
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseGetCard> getCardById(@PathVariable Long accountId, @PathVariable Long id) {
+    public ResponseEntity<ResponseGetCard> getCardById(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+                                                       @Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
         try {
             ResponseGetCard response = cardUseCaseOrchestrator.getCardById(id, accountId);
             return ResponseEntity.ok(response);
@@ -42,8 +61,14 @@ public class CardController {
         }
     }
 
+    @Operation(summary = "Obtener todas las tarjetas",
+            description = "Obtiene todas las tarjetas asociadas a una cuenta por id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Cuenta no encontrada", content = @Content)})
     @GetMapping
-    public ResponseEntity<?> getCardsByAccountId(@PathVariable Long accountId) {
+    public ResponseEntity<?> getCardsByAccountId(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
         List<ResponseGetCard> cards = cardUseCaseOrchestrator.getAllCardsByAcountId(accountId);
         if (cards.isEmpty()) {
             return ResponseEntity.ok().build();
@@ -52,8 +77,15 @@ public class CardController {
         }
     }
 
+    @Operation(summary = "Eliminar tarjeta",
+            description = "Elimina una tarjeta por id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Tarjeta no encontrada", content = @Content)})
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCardById(@PathVariable Long accountId, @PathVariable Long id) {
+    public ResponseEntity<String> deleteCardById(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+                                                 @Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
         cardUseCaseOrchestrator.deleteCardById(id, accountId);
         return ResponseEntity.ok("Card deleted successfully");
     }

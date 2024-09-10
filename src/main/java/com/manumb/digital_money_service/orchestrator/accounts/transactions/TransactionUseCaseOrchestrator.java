@@ -1,9 +1,10 @@
 package com.manumb.digital_money_service.orchestrator.accounts.transactions;
 
-import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewCardDepositTransaction;
-import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransferTransaction;
-import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
+import com.manumb.digital_money_service.business.accounts.transactions.TransactionDirection;
+import com.manumb.digital_money_service.business.accounts.transactions.TransactionType;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TransactionUseCaseOrchestrator {
@@ -15,5 +16,6 @@ public interface TransactionUseCaseOrchestrator {
 
     List<ResponseGetTransaction> getAllTransactionsForAccount(Long accountId);
 
-    ResponseGetTransaction getTransactionById(Long id);
-}
+    ResponseGetTransaction getTransactionById(Long accountId, Long transactionId);
+
+    List<ResponseGetTransaction> getTransactionsByAccountIdAndAmountRange(Long accountId, Double minAmount, Double maxAmount);}

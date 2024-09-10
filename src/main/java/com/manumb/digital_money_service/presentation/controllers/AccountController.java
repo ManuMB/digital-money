@@ -11,14 +11,23 @@ import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.business.jwt.JwtService;
 import com.manumb.digital_money_service.orchestrator.accounts.AccountUseCaseOrchestrator;
 import com.manumb.digital_money_service.orchestrator.accounts.transactions.TransactionUseCaseOrchestrator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterStyle;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -32,52 +41,104 @@ public class AccountController {
     private final TransactionUseCaseOrchestrator transactionUseCaseOrchestrator;
     private final JwtService jwtService;
 
-
+    @Operation(summary = "Realizar transferencia",
+            description = "Realiza una transferencia de dinero por id de cuenta y cvu/alias de otra cuenta.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Cuenta inexistente", content = @Content),
+            @ApiResponse(responseCode = "410", description = "Fondos insuficientes", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @PostMapping("/{accountId}/transfer")
-    public ResponseEntity<String> accountTransfer(@PathVariable Long accountId, @RequestBody RequestCreateNewTransferTransaction request) {
+    public ResponseEntity<String> accountTransfer(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+                                                  @Parameter(description = "Body de la transferencia a crear", required = true) @Valid @RequestBody RequestCreateNewTransferTransaction request) {
         transactionUseCaseOrchestrator.createTransferTransaction(accountId, request);
         return ResponseEntity.status(HttpStatus.OK).body("Transfer successful");
     }
 
+    @Operation(summary = "Ingresar dinero",
+            description = "Ingresa dinero a la cuenta desde una tarjeta por id de cuenta y detalles de la tarjeta existente.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @PostMapping("/{accountId}/deposit")
-    public ResponseEntity<String> cardDeposit(@PathVariable Long accountId, @RequestBody RequestCreateNewCardDepositTransaction request) {
+    public ResponseEntity<String> cardDeposit(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+                                              @Parameter(description = "Body del deposito a crear", required = true) @Valid @RequestBody RequestCreateNewCardDepositTransaction request) {
         transactionUseCaseOrchestrator.createCardDepositTransaction(accountId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body("Deposit successful");
     }
 
+    @Operation(summary = "Obtener informacion",
+            description = "Obtiene el cvu y alias de la cuenta por id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/{accountId}")
-    public ResponseEntity<ResponseGetAccountInfo> getAccountInfo(@PathVariable Long accountId) {
+    public ResponseEntity<ResponseGetAccountInfo> getAccountInfo(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
         ResponseGetAccountInfo response = accountUseCaseOrchestrator.getAccountInfo(accountId);
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Obtener balance",
+            description = "Obtiene el balance de la cuenta por id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/{accountId}/balance")
-    public ResponseEntity<ResponseGetBalanceAccount> getAccountBalance(@PathVariable Long accountId) {
+    public ResponseEntity<ResponseGetBalanceAccount> getAccountBalance(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
         ResponseGetBalanceAccount response = accountUseCaseOrchestrator.getBalance(accountId);
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Obtener ultimas transacciones",
+            description = "Obtiene las ultimas 5 transacciones de la cuenta.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/{accountId}/transactions")
-    public ResponseEntity<List<ResponseGetTransaction>> getLastTransactionsForAccount(@PathVariable Long accountId) {
+    public ResponseEntity<List<ResponseGetTransaction>> getLastTransactionsForAccount(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
         List<ResponseGetTransaction> transactions = transactionUseCaseOrchestrator.getLastFiveTransactionsForAccount(accountId);
         return ResponseEntity.ok(transactions);
     }
 
+    @Operation(summary = "Obtener todas las transacciones",
+            description = "Obtiene todas las transacciones de la cuenta.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/{accountId}/activity")
-    public ResponseEntity<List<ResponseGetTransaction>> getAllTransactionsForAccount(@PathVariable Long accountId) {
+    public ResponseEntity<List<ResponseGetTransaction>> getAllTransactionsForAccount(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
         List<ResponseGetTransaction> transactions = transactionUseCaseOrchestrator.getAllTransactionsForAccount(accountId);
         return ResponseEntity.ok(transactions);
     }
 
+    @Operation(summary = "Obtener transaccion",
+            description = "Obtiene una transaccion por id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Transaccion no encontrada", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/{accountId}/activity/{transactionId}")
-    public ResponseEntity<ResponseGetTransaction> getTransactionById(@PathVariable Long accountId, @PathVariable Long transactionId) {
+    public ResponseEntity<ResponseGetTransaction> getTransactionById(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+                                                                     @Parameter(description = "ID de la transaccion", required = true) @PathVariable Long transactionId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity<?> authorizationResponse = jwtService.verifyAuthorization(authentication, accountId);
         if (authorizationResponse != null) { // Check if authorization failed
             return (ResponseEntity<ResponseGetTransaction>) authorizationResponse; // Cast to the correct type
         }
         try {
-            ResponseGetTransaction transaction = transactionUseCaseOrchestrator.getTransactionById(transactionId);
+            ResponseGetTransaction transaction = transactionUseCaseOrchestrator.getTransactionById(accountId, transactionId);
             return ResponseEntity.ok(transaction);
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -86,8 +147,23 @@ public class AccountController {
         }
     }
 
+        @GetMapping("/{accountId}/transactions/filter")
+        public ResponseEntity<List<ResponseGetTransaction>> getTransactionsByAmountRange(@PathVariable Long accountId, @RequestParam Double minAmount, Double maxAmount) {
+            List<ResponseGetTransaction> transactions = transactionUseCaseOrchestrator
+                    .getTransactionsByAccountIdAndAmountRange(accountId, minAmount, maxAmount);
+            return ResponseEntity.ok(transactions);
+        }
+
+    @Operation(summary = "Actualizar informacion",
+            description = "Actualiza el alias de la cuenta por id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @PatchMapping("/{accountId}")
-    public ResponseEntity<String> updateAccountInfo(@PathVariable Long accountId, @RequestBody RequestUpdateAccountInfo request) {
+    public ResponseEntity<String> updateAccountInfo(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+                                                    @Parameter(description = "Body que contenga el alias a actualizar", required = true) @Valid @RequestBody RequestUpdateAccountInfo request) {
         accountUseCaseOrchestrator.updateAlias(accountId, request);
         return ResponseEntity.status(HttpStatus.OK).body("Account alias updated successfully");
     }

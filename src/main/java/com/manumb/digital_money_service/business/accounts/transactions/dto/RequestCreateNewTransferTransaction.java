@@ -11,7 +11,7 @@ public record RequestCreateNewTransferTransaction(
                 example = "CANTO.COCO.HOGAR",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         String destinationAccountIdentifier,
-        @NotNull(message = "ammount cannot be null")
+        @NotNull(message = "amount cannot be null")
         @Positive
         @Schema(description = "Cantidad de dinero a enviar en formato decimal.",
                 example = "100.0",

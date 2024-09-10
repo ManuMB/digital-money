@@ -19,6 +19,4 @@ public interface UserUseCaseOrchestrator {
     void sendRecoverPasswordEmail(String email) throws MessagingException, IOException;
 
     void changePassword(RequestChangePasswordUser requestChangePasswordUser);
-
-    void resendConfirmationEmail(String email) throws MessagingException, IOException;
 }

@@ -1,29 +1,26 @@
 package com.manumb.digital_money_service.orchestrator.users;
 
+import com.manumb.digital_money_service.business.email.SendEmail;
 import com.manumb.digital_money_service.business.jwt.JwtService;
+import com.manumb.digital_money_service.business.jwt.dto.ResponseUsernameAndFullNameDto;
 import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.business.users.UserService;
 import com.manumb.digital_money_service.business.users.dto.*;
 import com.manumb.digital_money_service.business.users.mappers.UserMapper;
 import jakarta.mail.MessagingException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
+@AllArgsConstructor
 public class UserUseCaseHandler implements UserUseCaseOrchestrator {
+
     private final UserService userService;
     private final JwtService jwtService;
-    //private final SendEmail sendEmail;
+    private final SendEmail sendEmail;
     private final UserMapper<RequestRegisterNewUser> registerUserMapper;
-
-
-    public UserUseCaseHandler(UserService userService, JwtService jwtService, UserMapper<RequestRegisterNewUser> registerUserMapper) {
-        this.userService = userService;
-        this.jwtService = jwtService;
-        //this.sendEmail = sendEmail;
-        this.registerUserMapper = registerUserMapper;
-    }
 
 
     @Override
@@ -32,7 +29,7 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator {
         userService.saveUser(user);
 
         String token = jwtService.generateEmailToken(user);
-        //sendEmail.sendConfirmationEmail(user.getFullName(), user.getEmail(), token);
+        sendEmail.sendConfirmationEmail(user.getFullName(), user.getEmail(), token);
         return new ResponseRegisterNewUser(
                 user.getFullName(),
                 user.getDni(),
@@ -73,7 +70,7 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator {
     }
 
     @Override
-    public void enableUser(String token) {
+    public void enableUser(String token){
         String email = jwtService.extractUsername(token);
         userService.enableUser(email);
     }
@@ -82,17 +79,12 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator {
     public void sendRecoverPasswordEmail(String email) throws MessagingException, IOException {
         User user = userService.findByEmail(email);
         String token = jwtService.generateEmailToken(user);
-        //sendEmail.sendRecoverPassEmail(user.getFullName(), email, token);
+        sendEmail.sendRecoverPassEmail(user.getFullName(), email, token);
     }
 
     @Override
     public void changePassword(RequestChangePasswordUser requestChangePasswordUser) {
         String email = jwtService.extractUsername(requestChangePasswordUser.token());
         userService.updatePassword(requestChangePasswordUser.firstPassword(), requestChangePasswordUser.secondPassword(), email);
-    }
-
-    @Override
-    public void resendConfirmationEmail(String email) throws MessagingException, IOException {
-        //TODO
     }
 }

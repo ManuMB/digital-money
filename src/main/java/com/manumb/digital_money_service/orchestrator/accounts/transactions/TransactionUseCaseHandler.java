@@ -5,11 +5,10 @@ import com.manumb.digital_money_service.business.accounts.AccountService;
 import com.manumb.digital_money_service.business.accounts.cards.CardService;
 import com.manumb.digital_money_service.business.accounts.cards.exception.CardNotFoundException;
 import com.manumb.digital_money_service.business.accounts.transactions.Transaction;
+import com.manumb.digital_money_service.business.accounts.transactions.TransactionDirection;
 import com.manumb.digital_money_service.business.accounts.transactions.TransactionService;
 import com.manumb.digital_money_service.business.accounts.transactions.TransactionType;
-import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewCardDepositTransaction;
-import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransferTransaction;
-import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
+import com.manumb.digital_money_service.business.accounts.transactions.dto.*;
 import com.manumb.digital_money_service.business.accounts.transactions.exception.InsufficientBalanceException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -70,15 +69,21 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
     public List<ResponseGetTransaction> getLastFiveTransactionsForAccount(Long accountId) {
         List<Transaction> transactions = transactionService.findLastFiveTransactionsForAccount(accountId);
         return transactions.stream()
-                .map(transaction -> new ResponseGetTransaction(
-                        transaction.getAmount(),
-                        transaction.getTransactionType(),
-                        transaction.getFromAccount().getUser().getFullName(),
-                        transaction.getFromAccount().getCvu(),
-                        transaction.getToAccount().getUser().getFullName(),
-                        transaction.getToAccount().getCvu(),
-                        transaction.getTransactionDate()
-                ))
+                .map(transaction -> {
+                    TransactionDirection direction =
+                            (transaction.getToAccount().getId().equals(accountId)) ?
+                                    TransactionDirection.INGRESS : TransactionDirection.EGRESS;
+                    return new ResponseGetTransaction(
+                            transaction.getAmount(),
+                            transaction.getTransactionType(),
+                            direction,
+                            transaction.getFromAccount().getUser().getFullName(),
+                            transaction.getFromAccount().getCvu(),
+                            transaction.getToAccount().getUser().getFullName(),
+                            transaction.getToAccount().getCvu(),
+                            transaction.getTransactionDate()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -86,29 +91,61 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
     public List<ResponseGetTransaction> getAllTransactionsForAccount(Long accountId) {
         List<Transaction> transactions = transactionService.findAllTransactionsForAccount(accountId);
         return transactions.stream()
-                .map(transaction -> new ResponseGetTransaction(
-                        transaction.getAmount(),
-                        transaction.getTransactionType(),
-                        transaction.getFromAccount().getUser().getFullName(),
-                        transaction.getFromAccount().getCvu(),
-                        transaction.getToAccount().getUser().getFullName(),
-                        transaction.getToAccount().getCvu(),
-                        transaction.getTransactionDate()
-                ))
+                .map(transaction -> {
+                    TransactionDirection direction =
+                            (transaction.getToAccount().getId().equals(accountId)) ?
+                                    TransactionDirection.INGRESS : TransactionDirection.EGRESS;
+                    return new ResponseGetTransaction(
+                            transaction.getAmount(),
+                            transaction.getTransactionType(),
+                            direction,
+                            transaction.getFromAccount().getUser().getFullName(),
+                            transaction.getFromAccount().getCvu(),
+                            transaction.getToAccount().getUser().getFullName(),
+                            transaction.getToAccount().getCvu(),
+                            transaction.getTransactionDate()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ResponseGetTransaction getTransactionById(Long id) {
-        Transaction transaction = transactionService.findTransactionById(id);
+    public ResponseGetTransaction getTransactionById(Long accountId, Long transactionId) {
+        Transaction transaction = transactionService.findTransactionById(transactionId);
+        TransactionDirection direction =
+                (transaction.getToAccount().getId().equals(accountId)) ?
+                        TransactionDirection.INGRESS : TransactionDirection.EGRESS;
         return new ResponseGetTransaction(
                 transaction.getAmount(),
                 transaction.getTransactionType(),
+                direction,
                 transaction.getFromAccount().getUser().getFullName(),
                 transaction.getFromAccount().getCvu(),
                 transaction.getToAccount().getUser().getFullName(),
                 transaction.getToAccount().getCvu(),
                 transaction.getTransactionDate()
         );
+    }
+
+    @Override
+    public List<ResponseGetTransaction> getTransactionsByAccountIdAndAmountRange(Long accountId, Double minAmount, Double maxAmount) {
+        List<Transaction> transactions = transactionService.findTransactionsByAccountIdAndAmountRange(accountId, minAmount, maxAmount);
+        return transactions.stream()
+                .map(transaction -> {
+                    TransactionDirection direction =
+                            (transaction.getToAccount().getId().equals(accountId)) ?
+                                    TransactionDirection.INGRESS : TransactionDirection.EGRESS;
+                    return new ResponseGetTransaction(
+                            transaction.getAmount(),
+                            transaction.getTransactionType(),
+                            direction,
+                            transaction.getFromAccount().getUser().getFullName(),
+                            transaction.getFromAccount().getCvu(),
+                            transaction.getToAccount().getUser().getFullName(),
+                            transaction.getToAccount().getCvu(),
+                            transaction.getTransactionDate()
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }
