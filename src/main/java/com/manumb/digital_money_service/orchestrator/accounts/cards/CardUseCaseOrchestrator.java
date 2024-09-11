@@ -7,7 +7,7 @@ import com.manumb.digital_money_service.business.accounts.cards.dto.ResponseRegi
 import java.util.List;
 
 public interface CardUseCaseOrchestrator {
-    ResponseRegisterNewCard createCard(Long accountId, RequestRegisterNewCard requestRegisterNewCard);
+    void createCard(Long accountId, RequestRegisterNewCard requestRegisterNewCard);
 
     ResponseGetCard getCardById(Long cardId, Long accountId);
 

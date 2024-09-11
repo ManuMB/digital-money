@@ -193,12 +193,12 @@ public class AccountController {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "500", description = "Cuenta no encontrada", content = @Content)})
-    @GetMapping("/cards/{id}")
+    @GetMapping("/cards/{cardId}")
     public ResponseEntity<ResponseGetCard> getCardById(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
-                                                       @Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
+                                                       @Parameter(description = "ID del usuario", required = true) @PathVariable Long cardId) {
         jwtService.verifyAuthorization(accountId);
         try {
-            ResponseGetCard response = cardUseCaseOrchestrator.getCardById(id, accountId);
+            ResponseGetCard response = cardUseCaseOrchestrator.getCardById(cardId, accountId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -212,7 +212,7 @@ public class AccountController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "500", description = "Cuenta no encontrada", content = @Content)})
     @GetMapping("/cards")
-    public ResponseEntity<?> getCardsByAccountId(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
+    public ResponseEntity<?> getAllCardsByAccountId(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
         jwtService.verifyAuthorization(accountId);
         List<ResponseGetCard> cards = cardUseCaseOrchestrator.getAllCardsByAcountId(accountId);
         if (cards.isEmpty()) {
@@ -228,11 +228,11 @@ public class AccountController {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "404", description = "Tarjeta no encontrada", content = @Content)})
-    @DeleteMapping("/cards/{id}")
+    @DeleteMapping("/cards/{cardId}")
     public ResponseEntity<String> deleteCardById(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
-                                                 @Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
+                                                 @Parameter(description = "ID del usuario", required = true) @PathVariable Long cardId) {
         jwtService.verifyAuthorization(accountId);
-        cardUseCaseOrchestrator.deleteCardById(id, accountId);
+        cardUseCaseOrchestrator.deleteCardById(cardId, accountId);
         return ResponseEntity.ok("Card deleted successfully");
     }
 }

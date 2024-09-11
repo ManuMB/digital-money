@@ -17,20 +17,13 @@ public class CardUseCaseHandler implements CardUseCaseOrchestrator {
     private final CardService cardService;
 
     @Override
-    public ResponseRegisterNewCard createCard(Long accountId, RequestRegisterNewCard requestRegisterNewCard) {
+    public void createCard(Long accountId, RequestRegisterNewCard requestRegisterNewCard) {
         Card card = new Card();
         card.setCardHolder(requestRegisterNewCard.cardHolder());
         card.setCardNumber(requestRegisterNewCard.cardNumber());
         card.setCvv(requestRegisterNewCard.cvv());
         card.setExpirationDate(requestRegisterNewCard.expirationDate());
         cardService.createCard(accountId, card);
-
-        return new ResponseRegisterNewCard(
-                card.getCardHolder(),
-                card.getCardNumber(),
-                card.getCvv(),
-                card.getExpirationDate()
-        );
     }
 
     @Override
