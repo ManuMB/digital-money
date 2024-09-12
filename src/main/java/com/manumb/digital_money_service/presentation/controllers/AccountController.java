@@ -20,15 +20,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts/{accountId}")
+@Validated
 @Tag(name = "Accounts", description = "API para cuentas bancarias")
 @AllArgsConstructor
 public class AccountController {
@@ -48,7 +53,7 @@ public class AccountController {
             @ApiResponse(responseCode = "410", description = "Fondos insuficientes", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @PostMapping("/transfer")
-    public ResponseEntity<String> accountTransfer(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+    public ResponseEntity<String> accountTransfer(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
                                                   @Parameter(description = "Body de la transferencia a crear", required = true) @Valid @RequestBody RequestCreateNewTransferTransaction request) {
         jwtService.verifyAuthorization(accountId);
         transactionUseCaseOrchestrator.createTransferTransaction(accountId, request);
@@ -62,7 +67,7 @@ public class AccountController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @PostMapping("/deposit")
-    public ResponseEntity<String> cardDeposit(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+    public ResponseEntity<String> cardDeposit(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
                                               @Parameter(description = "Body del deposito a crear", required = true) @Valid @RequestBody RequestCreateNewCardDepositTransaction request) {
         jwtService.verifyAuthorization(accountId);
         transactionUseCaseOrchestrator.createCardDepositTransaction(accountId, request);
@@ -77,7 +82,7 @@ public class AccountController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping
-    public ResponseEntity<ResponseGetAccountInfo> getAccountInfo(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
+    public ResponseEntity<ResponseGetAccountInfo> getAccountInfo(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId) {
         jwtService.verifyAuthorization(accountId);
         ResponseGetAccountInfo response = accountUseCaseOrchestrator.getAccountInfo(accountId);
         return ResponseEntity.ok(response);
@@ -91,7 +96,7 @@ public class AccountController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/balance")
-    public ResponseEntity<ResponseGetBalanceAccount> getAccountBalance(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
+    public ResponseEntity<ResponseGetBalanceAccount> getAccountBalance(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId) {
         jwtService.verifyAuthorization(accountId);
         ResponseGetBalanceAccount response = accountUseCaseOrchestrator.getBalance(accountId);
         return ResponseEntity.ok(response);
@@ -105,7 +110,7 @@ public class AccountController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/transactions")
-    public ResponseEntity<List<ResponseGetTransaction>> getLastTransactionsForAccount(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
+    public ResponseEntity<List<ResponseGetTransaction>> getLastTransactionsForAccount(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId) {
         jwtService.verifyAuthorization(accountId);
         List<ResponseGetTransaction> transactions = transactionUseCaseOrchestrator.getLastFiveTransactionsForAccount(accountId);
         return ResponseEntity.ok(transactions);
@@ -119,7 +124,7 @@ public class AccountController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/activity")
-    public ResponseEntity<List<ResponseGetTransaction>> getAllTransactionsForAccount(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
+    public ResponseEntity<List<ResponseGetTransaction>> getAllTransactionsForAccount(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId) {
         jwtService.verifyAuthorization(accountId);
         List<ResponseGetTransaction> transactions = transactionUseCaseOrchestrator.getAllTransactionsForAccount(accountId);
         return ResponseEntity.ok(transactions);
@@ -135,8 +140,8 @@ public class AccountController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/activity/{transactionId}")
     public ResponseEntity<ResponseGetTransaction> getTransactionById(
-            @Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
-            @Parameter(description = "ID de la transaccion", required = true) @PathVariable Long transactionId) {
+            @Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
+            @Parameter(description = "ID de la transaccion", required = true) @NotNull @Positive @PathVariable Long transactionId) {
         jwtService.verifyAuthorization(accountId);
         ResponseGetTransaction transaction = transactionUseCaseOrchestrator.getTransactionById(accountId, transactionId);
         return ResponseEntity.ok(transaction);
@@ -150,8 +155,8 @@ public class AccountController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/transactions/filter")
-    public ResponseEntity<List<ResponseGetTransaction>> getTransactionsByAmountRange(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
-                                                                                     @Parameter(description = "Monto minimo y maximo para filtrar", required = true) @RequestParam Double minAmount, Double maxAmount) {
+    public ResponseEntity<List<ResponseGetTransaction>> getTransactionsByAmountRange(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
+                                                                                     @Parameter(description = "Monto minimo y maximo para filtrar", required = true) @NotNull @PositiveOrZero @RequestParam Double minAmount, Double maxAmount) {
         jwtService.verifyAuthorization(accountId);
         List<ResponseGetTransaction> transactions = transactionUseCaseOrchestrator
                 .getTransactionsByAccountIdAndAmountRange(accountId, minAmount, maxAmount);
@@ -166,7 +171,7 @@ public class AccountController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @PatchMapping
-    public ResponseEntity<String> updateAccountInfo(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+    public ResponseEntity<String> updateAccountInfo(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
                                                     @Parameter(description = "Body que contenga el alias a actualizar", required = true) @Valid @RequestBody RequestUpdateAccountInfo request) {
         jwtService.verifyAuthorization(accountId);
         accountUseCaseOrchestrator.updateAlias(accountId, request);
@@ -180,7 +185,7 @@ public class AccountController {
             @ApiResponse(responseCode = "409", description = "Tarjeta asociada a otra cuenta", content = @Content),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)})
     @PostMapping("/cards")
-    public ResponseEntity<String> createCard(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+    public ResponseEntity<String> createCard(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
                                              @Parameter(description = "Body de la tarjeta a crear", required = true) @Valid @RequestBody RequestRegisterNewCard requestRegisterNewCard) {
         jwtService.verifyAuthorization(accountId);
         cardUseCaseOrchestrator.createCard(accountId, requestRegisterNewCard);
@@ -194,7 +199,7 @@ public class AccountController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "500", description = "Cuenta no encontrada", content = @Content)})
     @GetMapping("/cards/{cardId}")
-    public ResponseEntity<ResponseGetCard> getCardById(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
+    public ResponseEntity<ResponseGetCard> getCardById(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
                                                        @Parameter(description = "ID del usuario", required = true) @PathVariable Long cardId) {
         jwtService.verifyAuthorization(accountId);
         try {
@@ -212,7 +217,7 @@ public class AccountController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "500", description = "Cuenta no encontrada", content = @Content)})
     @GetMapping("/cards")
-    public ResponseEntity<?> getAllCardsByAccountId(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId) {
+    public ResponseEntity<?> getAllCardsByAccountId(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId) {
         jwtService.verifyAuthorization(accountId);
         List<ResponseGetCard> cards = cardUseCaseOrchestrator.getAllCardsByAcountId(accountId);
         if (cards.isEmpty()) {
@@ -229,8 +234,8 @@ public class AccountController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "404", description = "Tarjeta no encontrada", content = @Content)})
     @DeleteMapping("/cards/{cardId}")
-    public ResponseEntity<String> deleteCardById(@Parameter(description = "ID de la cuenta", required = true) @PathVariable Long accountId,
-                                                 @Parameter(description = "ID del usuario", required = true) @PathVariable Long cardId) {
+    public ResponseEntity<String> deleteCardById(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
+                                                 @Parameter(description = "ID del usuario", required = true) @NotNull @Positive @PathVariable Long cardId) {
         jwtService.verifyAuthorization(accountId);
         cardUseCaseOrchestrator.deleteCardById(cardId, accountId);
         return ResponseEntity.ok("Card deleted successfully");

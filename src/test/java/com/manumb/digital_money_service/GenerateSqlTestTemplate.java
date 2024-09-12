@@ -20,12 +20,17 @@ public class GenerateSqlTestTemplate {
             String username = properties.getProperty("spring.datasource.username");
             String password = properties.getProperty("spring.datasource.password");
 
+            System.out.println("Connecting to database...");
+            System.out.println("URL: " + url);
+            System.out.println("Username: " + username);
+
             // Establece la conexión a la base de datos
             Connection connection = DriverManager.getConnection(url, username, password);
             Statement statement = connection.createStatement();
 
             // Lee el script SQL desde el archivo
             String script = loadSQLScript(scriptName);
+            System.out.println("SQL Script: " + script);
             String[] statements = script.split(";");
 
 
@@ -33,6 +38,7 @@ public class GenerateSqlTestTemplate {
             for (String sql : statements) {
                 // Ignorar las sentencias en blanco
                 if (!sql.trim().isEmpty()) {
+                    System.out.println("Executing SQL: " + sql);
                     statement.executeUpdate(sql);
                 }
             }
@@ -55,6 +61,7 @@ public class GenerateSqlTestTemplate {
     }
 
     public static String loadSQLScript(String scriptFilePath) throws IOException {
+        System.out.println("Loading SQL script from: " + scriptFilePath);
         StringBuilder script = new StringBuilder();
         try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream(scriptFilePath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {

@@ -6,8 +6,6 @@ import com.manumb.digital_money_service.business.accounts.cards.Card;
 import com.manumb.digital_money_service.business.accounts.cards.CardService;
 import com.manumb.digital_money_service.business.accounts.cards.exception.CardNotFoundException;
 import com.manumb.digital_money_service.business.exceptions.ConflictException;
-import com.manumb.digital_money_service.business.exceptions.NotFoundException;
-import com.manumb.digital_money_service.persistence.AccountSqlRepository;
 import com.manumb.digital_money_service.persistence.CardSqlRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

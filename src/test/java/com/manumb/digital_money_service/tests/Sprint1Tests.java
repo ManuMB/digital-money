@@ -28,7 +28,17 @@ public class Sprint1Tests {
     @Autowired
     private UserServiceHandler userServiceHandler;
 
+    @BeforeAll
+    public static void sqlSetUp() {
+        GenerateSqlTestTemplate.executeSQLScript("application.properties", "sqlTemplates/Sprint1TemplateSqlTest.sql");
+    }
 
+    @AfterAll
+    public static void cleanUp() {
+        GenerateSqlTestTemplate.executeSQLScript("application.properties", "sqlTemplates/DeleteAllTemplateSqlTest.sql");
+    }
+
+    //Ok, se registra un nuevo usuario.
     @Test
     @Order(1)
     public void register() {
@@ -49,7 +59,7 @@ public class Sprint1Tests {
                 .log().body();
     }
 
-    //Se intenta registrar un usuario con campo faltante dni
+    //Bad Request, Se intenta registrar un usuario con campo faltante dni.
     @Test
     @Order(2)
     public void badRegister_1() {
@@ -64,11 +74,11 @@ public class Sprint1Tests {
                 .body(request.toString())
                 .post(userUrl + registerPath)
                 .then()
-                .statusCode(500)
+                .statusCode(400)
                 .log().body();
     }
 
-    //Se intenta registrar un usuario ya existente
+    //Bad request, se intenta registrar un usuario ya existente.
     @Test
     @Order(3)
     public void badRegister_2() {
@@ -89,7 +99,7 @@ public class Sprint1Tests {
                 .log().body();
     }
 
-    //Se intenta registrar un usuario con dni ya existente
+    //Bad request, se intenta registrar un usuario con dni ya existente.
     @Test
     @Order(4)
     public void badRegister_3() {
@@ -110,12 +120,13 @@ public class Sprint1Tests {
                 .log().body();
     }
 
+    //OK, se loguea un usuario existente.
     @Test
     @Order(5)
     public void login() {
 
         JsonObject request = new JsonObject();
-        request.addProperty("email", "e.quito@gmail.com");
+        request.addProperty("email", "test.user@email.com");
         request.addProperty("password", "Password123");
 
         given()
@@ -127,7 +138,7 @@ public class Sprint1Tests {
                 .log().body();
     }
 
-    //Se intenta realizar login con email inexistente
+    //Not Found, se intenta realizar login con email inexistente.
     @Test
     @Order(6)
     public void badLogin() {
@@ -145,10 +156,11 @@ public class Sprint1Tests {
                 .log().body();
     }
 
+    //OK, se desloguea un usuario existente.
     @Test
     @Order(7)
     public void logout() {
-        var user = userServiceHandler.findByEmail("e.quito@gmail.com");
+        var user = userServiceHandler.findByEmail("test.user@email.com");
         String bearerToken = jwtServiceHandler.generateToken(new HashMap<>(), user).getJwt();
 
         given()

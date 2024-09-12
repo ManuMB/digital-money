@@ -1,12 +1,10 @@
 package com.manumb.digital_money_service.tests;
 
 import com.google.gson.JsonObject;
+import com.manumb.digital_money_service.GenerateSqlTestTemplate;
 import com.manumb.digital_money_service.business.jwt.services.JwtServiceHandler;
 import com.manumb.digital_money_service.business.users.services.UserServiceHandler;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,7 +16,7 @@ import static io.restassured.RestAssured.given;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class Sprint4Tests {
     private final String accountUrl = "http://localhost:8080/api/accounts";
-    String accountId = "/8";
+    String accountId = "/1";
     private String bearerToken;
 
     @Autowired
@@ -28,16 +26,26 @@ public class Sprint4Tests {
 
     @BeforeEach
     public void setUp() {
-        var user = userServiceHandler.findByEmail("e.quito@gmail.com");
+        var user = userServiceHandler.findByEmail("test.user@email.com");
         bearerToken = jwtServiceHandler.generateToken(new HashMap<>(), user).getJwt();
     }
 
+    @BeforeAll
+    public static void sqlSetUp() {
+        GenerateSqlTestTemplate.executeSQLScript("application.properties", "sqlTemplates/Sprint4TemplateSqlTest.sql");
+    }
 
-    //Transferencia exitosa con alias
+    @AfterAll
+    public static void cleanUp() {
+        GenerateSqlTestTemplate.executeSQLScript("application.properties", "sqlTemplates/DeleteAllTemplateSqlTest.sql");
+    }
+
+
+    //Ok, se crea una transferencia exitosa con alias.
     @Test
     public void successfulCreateAccountTransfer_1(){
         JsonObject request = new JsonObject();
-        request.addProperty("destinationAccountIdentifier", "HOLA.QUE.TAL");
+        request.addProperty("destinationAccountIdentifier", "JUAN.PEREZ.ALIAS");
         request.addProperty("amount", "100.0");
 
         given()
@@ -50,13 +58,12 @@ public class Sprint4Tests {
                 .log().body();
     }
 
-    //Transferencia exitosa con cvu
+    //Ok, se crea una transferencia exitosa con cvu.
     @Test
     public void successfulCreateAccountTransfer_2(){
         JsonObject request = new JsonObject();
-        request.addProperty("destinationAccountIdentifier", "HOLA.QUE.TAL");
-        //TODO
-        request.addProperty("amount", "112233");
+        request.addProperty("destinationAccountIdentifier", "33333333333");
+        request.addProperty("amount", "100.0");
 
         given()
                 .header("Authorization", "DM-" + bearerToken)
@@ -68,7 +75,7 @@ public class Sprint4Tests {
                 .log().body();
     }
 
-    //Se intenta realizar transferencia a una cuenta inexistente
+    //Bad Request, se intenta realizar una transferencia a una cuenta inexistente.
     @Test
     public void badCreateAccountTransfer_1(){
         JsonObject request = new JsonObject();
@@ -85,11 +92,11 @@ public class Sprint4Tests {
                 .log().body();
     }
 
-    //Se intenta realizar transferencia con fondos insuficientes
+    //Gone, se intenta realizar una transferencia con fondos insuficientes.
     @Test
     public void badCreateAccountTransfer_2(){
         JsonObject request = new JsonObject();
-        request.addProperty("destinationAccountIdentifier", "HOLA.QUE.TAL");
+        request.addProperty("destinationAccountIdentifier", "JUAN.PEREZ.ALIAS");
         request.addProperty("amount", "100000.0");
 
         given()
@@ -102,16 +109,14 @@ public class Sprint4Tests {
                 .log().body();
     }
 
-    //Forbidden
+    //Forbidden, se intenta realizar una transferencia sin estar loguado.
     @Test
     public void badCreateAccountTransfer_3(){
         JsonObject request = new JsonObject();
-        request.addProperty("destinationAccountIdentifier", "HOLA.QUE.TAL");
+        request.addProperty("destinationAccountIdentifier", "JUAN.PEREZ.ALIAS");
         request.addProperty("amount", "100.0");
 
         given()
-                //TODO
-                .header("Authorization", "DM-" + bearerToken)
                 .contentType("application/json")
                 .body(request.toString())
                 .post(accountUrl + accountId + "/transfer")

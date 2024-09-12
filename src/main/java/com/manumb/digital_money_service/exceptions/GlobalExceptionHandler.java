@@ -1,6 +1,7 @@
 package com.manumb.digital_money_service.exceptions;
 
 import com.manumb.digital_money_service.business.accounts.cards.exception.CardNotFoundException;
+import com.manumb.digital_money_service.business.accounts.transactions.exception.DestinationAccountNotFoundException;
 import com.manumb.digital_money_service.business.accounts.transactions.exception.InsufficientBalanceException;
 import com.manumb.digital_money_service.business.accounts.transactions.exception.TransactionNotFoundException;
 import com.manumb.digital_money_service.business.exceptions.ConflictException;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -84,6 +86,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserExistsException.class)
     public ResponseEntity<String> handleUserExistsException(UserExistsException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or dni already exist");
+    }
+
+    @ExceptionHandler(DestinationAccountNotFoundException.class)
+    public ResponseEntity<String> handleDestinationAccountNotFoundException(DestinationAccountNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String errorMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
 }

@@ -8,7 +8,6 @@ import com.manumb.digital_money_service.business.users.exception.UserExistsExcep
 import com.manumb.digital_money_service.persistence.AccountSqlRepository;
 import com.manumb.digital_money_service.persistence.UserSqlRepository;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

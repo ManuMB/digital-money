@@ -2,6 +2,7 @@ package com.manumb.digital_money_service.business.accounts.services;
 
 import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.accounts.AccountService;
+import com.manumb.digital_money_service.business.accounts.transactions.exception.DestinationAccountNotFoundException;
 import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.persistence.AccountSqlRepository;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class AccountServiceHandler implements AccountService {
     @Override
     public Account findByAliasOrCvu(String identifier) {
         return accountSqlRepository.findByAliasOrCvu(identifier)
-                .orElseThrow(() -> new NotFoundException("Account not found"));
+                .orElseThrow(() -> new DestinationAccountNotFoundException("Destination account not found"));
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.manumb.digital_money_service.business.accounts.cards.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ public record RequestRegisterNewCard(
         @NotBlank(message = "card number cannot be blank")
         @Size(min = 16, max = 16, message = "card number must have 16 characters")
         @Schema(description = "Numero de la tarjeta. Debe contener 16 caracteres.",
-                example = "111222333444555",
+                example = "1112223334445556",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         String cardNumber,
         @NotBlank(message = "cvv cannot be blank")
@@ -25,7 +26,7 @@ public record RequestRegisterNewCard(
                 example = "123",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         String cvv,
-        @NotBlank(message = "expiration date cannot be null")
+        @NotNull(message = "expiration date cannot be null")
         @FutureOrPresent
         @Schema(description = "Fecha de vencimiento de la tarjeta. No debe ser una fecha y hora anterior a la actual.",
                 example = "2030-01-01",

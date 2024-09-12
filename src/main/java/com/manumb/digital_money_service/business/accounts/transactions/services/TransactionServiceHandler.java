@@ -3,7 +3,6 @@ package com.manumb.digital_money_service.business.accounts.transactions.services
 import com.manumb.digital_money_service.business.accounts.transactions.Transaction;
 import com.manumb.digital_money_service.business.accounts.transactions.TransactionService;
 import com.manumb.digital_money_service.business.accounts.transactions.exception.TransactionNotFoundException;
-import com.manumb.digital_money_service.business.exceptions.NotFoundException;
 import com.manumb.digital_money_service.persistence.TransactionSqlRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

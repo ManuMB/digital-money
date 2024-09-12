@@ -42,7 +42,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private Boolean enabled = true;
+    private Boolean enabled = false;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Account account;

@@ -1,8 +1,6 @@
 package com.manumb.digital_money_service.business.jwt;
 
 import com.manumb.digital_money_service.business.users.User;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -4,7 +4,6 @@ import com.manumb.digital_money_service.business.accounts.cards.Card;
 import com.manumb.digital_money_service.business.accounts.cards.CardService;
 import com.manumb.digital_money_service.business.accounts.cards.dto.RequestRegisterNewCard;
 import com.manumb.digital_money_service.business.accounts.cards.dto.ResponseGetCard;
-import com.manumb.digital_money_service.business.accounts.cards.dto.ResponseRegisterNewCard;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
