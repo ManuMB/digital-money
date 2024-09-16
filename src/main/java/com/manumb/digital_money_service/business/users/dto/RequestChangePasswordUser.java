@@ -4,9 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record RequestChangePasswordUser(
         @NotBlank(message = "password cannot be blank")
-        String firstPassword,
+        String newPassword,
         @NotBlank(message = "password cannot be blank")
-        String secondPassword,
+        String repeatNewPassword,
         @NotBlank(message = "token cannot be blank")
         String token
 ) {

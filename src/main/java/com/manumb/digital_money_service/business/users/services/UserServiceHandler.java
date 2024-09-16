@@ -103,11 +103,11 @@ public class UserServiceHandler implements UserService, UserDetailsService {
     }
 
     @Override
-    public void updatePassword(String firstPassword, String repeatedPassword, String email) {
-        if (!firstPassword.equals(repeatedPassword)) {
+    public void updatePassword(String newPassword, String repeatNewPassword, String email) {
+        if (!newPassword.equals(repeatNewPassword)) {
             throw new RuntimeException("Las claves ingresadas son diferentes");
         }
-        var hashedPassword = passwordEncoder.encode(firstPassword);
+        var hashedPassword = passwordEncoder.encode(newPassword);
         userSqlRepository.changeUserPassword(hashedPassword, email);
     }
 

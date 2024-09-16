@@ -84,6 +84,6 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator {
     @Override
     public void changePassword(RequestChangePasswordUser requestChangePasswordUser) {
         String email = jwtService.extractUsername(requestChangePasswordUser.token());
-        userService.updatePassword(requestChangePasswordUser.firstPassword(), requestChangePasswordUser.secondPassword(), email);
+        userService.updatePassword(requestChangePasswordUser.newPassword(), requestChangePasswordUser.repeatNewPassword(), email);
     }
 }

@@ -1,5 +1,6 @@
 package com.manumb.digital_money_service.orchestrator.auth;
 
+import com.manumb.digital_money_service.business.exceptions.BadRequestException;
 import com.manumb.digital_money_service.business.jwt.JwtService;
 import com.manumb.digital_money_service.business.security.exception.IncorrectPasswordException;
 import com.manumb.digital_money_service.business.users.UserService;
@@ -32,6 +33,11 @@ public class AuthUseCaseHandler implements AuthUseCaseOrchestrator {
     public ResponseUserLogin userLogin(RequestUserLogin requestUserLogin) {
         var email = requestUserLogin.email();
 
+        var user = userService.findByEmail(email);
+        if (!user.isEnabled()) {
+            throw new BadRequestException("User is not enabled");
+        }
+
         try {
             //create an Authentication object with username and password credential
             var abstractionOfAuthenticationToken = new UsernamePasswordAuthenticationToken(
@@ -42,14 +48,12 @@ public class AuthUseCaseHandler implements AuthUseCaseOrchestrator {
             authenticationManager.authenticate(abstractionOfAuthenticationToken);
 
         } catch (AuthenticationException ex) {
-            // Check if the user exists first
-            var user = userService.findByEmail(email);
             // If user exists but authentication failed, assume bad credentials
             throw new IncorrectPasswordException("Incorrect password");
         }
 
         //bring the user from DB
-        var user = userService.findByEmail(email);
+        //var user = userService.findByEmail(email);
 
         //TODO Obtener la lista de cuentas asociados al usuario
 

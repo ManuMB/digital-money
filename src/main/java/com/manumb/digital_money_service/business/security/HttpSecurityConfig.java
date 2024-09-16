@@ -46,9 +46,9 @@ public class HttpSecurityConfig {
 
             auth.requestMatchers(
                     "/api/users/register",
-                    "/api/users/owner/confirm-email",
-                    "/api/users/owner/resend-email",
+                    "/api/users/confirm-email",
                     "/api/users/modify-password",
+                    "/api/users/recover-password",
                     "/api/auth/**",
                     "/api/swagger-ui/**",
                     "/api/v3/api-docs/**",

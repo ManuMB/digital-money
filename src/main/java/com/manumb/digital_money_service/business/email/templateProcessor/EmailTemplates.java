@@ -10,12 +10,11 @@ public class EmailTemplates {
             ".secondary-text{font-size:15px;font-weight:300}</style><meta charset=UTF-8 /><meta name=viewport content=\"width=device-width," +
             " initial-scale=1.0\" /><link rel=preconnect href=https://fonts.googleapis.com /><link rel=preconnect href=https://fonts.gstatic.com" +
             " crossorigin /><link href=\"https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap\" rel=stylesheet" +
-            " /><title>Email Confirmation</title></head><body><table class=container><tr><td class=header style=\"height: 80px;\"> style=\"max-width: 100%" +
-            "; height: auto;\" /></td></tr><tr><td style=\"padding: 20px;\" class=text-center><p style=\"font-size: 15px; margin: 30px 0; font-weight: 300; text-align: left;\"" +
+            " /><title>Email Confirmation</title></head><body><table class=container><tr><td class=header style=\"height: 80px;\"></td></tr><tr><td style=\"padding: 20px;\" class=text-center><p style=\"font-size: 15px; margin: 30px 0; font-weight: 300; text-align: left;\"" +
             ">Hola {{name}},</p><div class=text-center style=\"margin-bottom: 15px;\"><p class=main-text style=\"font-size: 20px; margin-bottom: 5px;\">Gracias por registrarte e" +
             "n <span style=\"font-weight: 600;\">Digital Money Service</span></p><p>Es hora de confirmar tu correo electrónico</p></div><div class=\"text-center secondary-text\" style=" +
             "\"margin-bottom: 15px; font-weight: 300; font-size: 15px;\"><p>Para confirmar tu cuenta, copia el siguiente token de confirmacion y pegalo en el body del endpoint " +
-            "confirmEmail.</p></div></div></td></tr><tr><td class" +
+            "confirmEmail.</p> <p>{{text}}</p></div></div></td></tr><tr><td class" +
             "=footer style=\"height: 55px;\"></td></tr></table></body></html>";
 
 
@@ -26,10 +25,10 @@ public class EmailTemplates {
             ".secondary-text{font-size:15px;font-weight:300}</style><meta charset=UTF-8 /><meta name=viewport content=\"width=device-width, initial-scale=1.0\" /><link rel=preconnect" +
             " href=https://fonts.googleapis.com /><link rel=preconnect href=https://fonts.gstatic.com crossorigin /><link href=\"https://fonts.googleapis.com/css2?family=Archivo:ital," +
             "wght@0,100..900;1,100..900&display=swap\" rel=stylesheet /><title>Email Confirmation</title></head><body><table class=container><tr><td class=header style=\"height: 80px;\">" +
-            " style=\"max-width: 100%; height: auto;\" /></td></tr><tr><td style=\"padding: 20px;\" class=text-center><p style=\"font-size: " +
+            "</td></tr><tr><td style=\"padding: 20px;\" class=text-center><p style=\"font-size: " +
             "15px; margin: 30px 0; font-weight: 300; text-align: left;\">Hola {{name}},</p><div class=\"text-center secondary-text\" style=\"margin-bottom: 15px; font-weight: 300; font-size" +
             ": 15px;\"><p>Se solicitó una recuperación de contraseña en tu cuenta <span style=\"font-weight: 600;\">{{email}}</span>. Para continuar, copia el siguiente token de reseteo de" +
-            " contraseña y pegalo en el body del endpoint modifyPassword.</p></div></td></tr><tr><t" +
+            " contraseña y pegalo en el body del endpoint modifyPassword.</p><p>{{text}}</p></div></td></tr><tr><t" +
             "d class=footer style=\"height: 55px;\"></td></tr></table></body></html>";
 
     public static String getConfirmEmailHtml() {

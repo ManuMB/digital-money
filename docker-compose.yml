@@ -7,43 +7,23 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DATABASE_URL: jdbc:postgresql://postgres:5432/dm_db
-      DATABASE_USERNAME: test
+      DATABASE_URL: jdbc:mysql://mysql:3306/dm_db
+      DATABASE_USERNAME: root
       DATABASE_PASSWORD: test
     depends_on:
-      - postgres
+      - mysql
 
-  postgres:
-    image: postgres:16.1-alpine
+  mysql:
+    image: mysql:8.1
     networks:
       - dm-network
-    container_name: dm_db-postgres
+    container_name: dm_db-mysql
     restart: always
     environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: dm_db
-      POSTGRES_INITDB_ARGS: '--encoding=UTF-8 --lc-collate=C --lc-ctype=C'
-    # volumes:
-    #   - postgres:/var/lib/postgresql/data
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: dm_db
     ports:
-      - "5432:5432"
-
-  pgadmin:
-    image: dpage/pgadmin4:8.7
-    networks:
-      - dm-network
-    restart: always
-    container_name: dm_db-pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@email.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    # volumes:
-    #   - pgadmin:/var/lib/pgadmin
-    ports:
-      - "8081:80"
-    depends_on:
-      - postgres
+      - "3306:3306"
 
 networks:
   dm-network:

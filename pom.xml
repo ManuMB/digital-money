@@ -61,8 +61,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
@@ -122,6 +123,11 @@
 			<artifactId>testng</artifactId>
 			<version>7.8.0</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.4</version>
 		</dependency>
 
 	</dependencies>

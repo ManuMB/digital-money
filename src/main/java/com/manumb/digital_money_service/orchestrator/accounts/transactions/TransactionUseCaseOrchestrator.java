@@ -17,4 +17,7 @@ public interface TransactionUseCaseOrchestrator {
 
     ResponseGetTransaction getTransactionById(Long accountId, Long transactionId);
 
-    List<ResponseGetTransaction> getTransactionsByAccountIdAndAmountRange(Long accountId, Double minAmount, Double maxAmount);}
+    List<ResponseGetTransaction> getTransactionsByAccountIdAndAmountRange(Long accountId, Double minAmount, Double maxAmount);
+
+    byte[] generateTransactionsPdf(Long accountId, Long transactionId);
+}

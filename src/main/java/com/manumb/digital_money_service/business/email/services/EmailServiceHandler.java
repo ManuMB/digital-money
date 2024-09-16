@@ -42,8 +42,8 @@ public class EmailServiceHandler implements SendEmail {
     @Async
     public void sendRecoverPassEmail(String fullName, String email, String token) throws MessagingException {
 
-        String text = "The password recovery token is: " + token;
-        String subject = "Password change request";
+        String text = "El token de cambio de contraseña es: " + token;
+        String subject = "Digital Money - Solicitud de cambio de Contraseña";
 
         String emailBuilt = processEmailForPasswordChange(fullName, email, text);
         this.sendEmailToUser(email, emailBuilt, subject);
@@ -53,8 +53,8 @@ public class EmailServiceHandler implements SendEmail {
     @Async
     public void sendConfirmationEmail(String fullName, String email, String token) throws MessagingException {
 
-        String text = "The confimation token is: " + token;
-        String subject = "Confirmation email";
+        String text = "El token de confirmación es: " + token;
+        String subject = "Digital Money - Confirmación de Cuenta";
 
         String emailBuilt = this.processEmailForConfirmation(fullName, text);
         this.sendEmailToUser(email, emailBuilt, subject);
@@ -81,7 +81,4 @@ public class EmailServiceHandler implements SendEmail {
 
         return TemplateProcessor.processTemplate(template, variables);
     }
-
-
-
 }

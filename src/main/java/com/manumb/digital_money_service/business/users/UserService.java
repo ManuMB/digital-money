@@ -20,6 +20,6 @@ public interface UserService {
 
     void enableUser(String email);
 
-    void updatePassword(String firstPassword, String repeatedPassword, String email);
+    void updatePassword(String newPassword, String repeatNewPassword, String email);
 
 }

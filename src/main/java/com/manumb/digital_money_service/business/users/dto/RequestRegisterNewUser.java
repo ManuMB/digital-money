@@ -12,9 +12,9 @@ public record RequestRegisterNewUser(
         String fullName,
         @NotBlank(message = "dni cannot be blank")
         @NotNull
-        @Size(min = 11, max = 11, message = "dni must have 11 characters")
+        @Size(min = 8, max = 8, message = "dni must have 11 characters")
         @Schema(description = "Dni del titular de la tarjeta.",
-                example = "12345678901",
+                example = "12345678",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         String dni,
         @NotBlank(message = "email cannot be blank")

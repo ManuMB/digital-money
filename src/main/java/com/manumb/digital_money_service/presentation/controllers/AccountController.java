@@ -24,8 +24,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -161,6 +160,23 @@ public class AccountController {
         List<ResponseGetTransaction> transactions = transactionUseCaseOrchestrator
                 .getTransactionsByAccountIdAndAmountRange(accountId, minAmount, maxAmount);
         return ResponseEntity.ok(transactions);
+    }
+
+    @GetMapping("/{transactionId}/pdf")
+    public ResponseEntity<byte[]> getTransactionPdf(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
+                                                    @Parameter(description = "ID de la transaccion", required = true) @NotNull @Positive @PathVariable Long transactionId) {
+        jwtService.verifyAuthorization(accountId);
+        byte[] pdfData = transactionUseCaseOrchestrator.generateTransactionsPdf(accountId, transactionId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("transaction_" + transactionId + ".pdf")
+                .build());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfData);
     }
 
     @Operation(summary = "Actualizar informacion",

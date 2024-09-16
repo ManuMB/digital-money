@@ -1,5 +1,6 @@
 package com.manumb.digital_money_service.orchestrator.accounts.transactions;
 
+import com.itextpdf.text.DocumentException;
 import com.manumb.digital_money_service.business.accounts.Account;
 import com.manumb.digital_money_service.business.accounts.AccountService;
 import com.manumb.digital_money_service.business.accounts.cards.CardService;
@@ -12,9 +13,11 @@ import com.manumb.digital_money_service.business.accounts.transactions.dto.Reque
 import com.manumb.digital_money_service.business.accounts.transactions.dto.RequestCreateNewTransferTransaction;
 import com.manumb.digital_money_service.business.accounts.transactions.dto.ResponseGetTransaction;
 import com.manumb.digital_money_service.business.accounts.transactions.exception.InsufficientBalanceException;
+import com.manumb.digital_money_service.business.accounts.transactions.util.PdfGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +28,7 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
     private final TransactionService transactionService;
     private final AccountService accountService;
     private final CardService cardService;
+    private final PdfGenerator pdfGenerator;
 
 
     @Override
@@ -149,5 +153,18 @@ public class TransactionUseCaseHandler implements TransactionUseCaseOrchestrator
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public byte[] generateTransactionsPdf(Long accountId, Long transactionId) {
+        Transaction transaction = transactionService.findTransactionById(transactionId);
+        TransactionDirection direction =
+                (transaction.getToAccount().getId().equals(accountId)) ?
+                        TransactionDirection.INGRESS : TransactionDirection.EGRESS;
+        try {
+            return pdfGenerator.generateTransactionPdf(transaction, direction);
+        } catch (IOException | DocumentException e) {
+            throw new RuntimeException("Failed to generate PDF", e);
+        }
     }
 }

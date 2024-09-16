@@ -1,5 +1,4 @@
 # Build stage
-#
 FROM maven:3.6.3-openjdk-17-slim AS build
 ENV HOME=/usr/app
 RUN mkdir -p $HOME
@@ -7,9 +6,7 @@ WORKDIR $HOME
 ADD . $HOME
 RUN mvn -X -f $HOME/pom.xml clean package -DskipTests
 
-#
 # Package stage
-#
 FROM eclipse-temurin:17-jre-jammy
 ENV DATABASE_URL=${DATABASE_URL}
 ENV DATABASE_USERNAME=${DATABASE_USERNAME}
