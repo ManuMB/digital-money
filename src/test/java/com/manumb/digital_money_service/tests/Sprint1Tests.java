@@ -45,7 +45,7 @@ public class Sprint1Tests {
 
         JsonObject request = new JsonObject();
         request.addProperty("fullName", "Esteban Quito");
-        request.addProperty("dni", "12345678901");
+        request.addProperty("dni", "12345678");
         request.addProperty("email", "e.quito@gmail.com");
         request.addProperty("phoneNumber", "1112345678");
         request.addProperty("password", "Password123");
@@ -85,7 +85,7 @@ public class Sprint1Tests {
 
         JsonObject request = new JsonObject();
         request.addProperty("fullName", "Esteban Quito");
-        request.addProperty("dni", "12345678901");
+        request.addProperty("dni", "12345678");
         request.addProperty("email", "e.quito@gmail.com");
         request.addProperty("phoneNumber", "1112345678");
         request.addProperty("password", "Password123");
@@ -106,7 +106,7 @@ public class Sprint1Tests {
 
         JsonObject request = new JsonObject();
         request.addProperty("fullName", "Juan Perez");
-        request.addProperty("dni", "12345678901");
+        request.addProperty("dni", "12345678");
         request.addProperty("email", "aaaa@gmail.com");
         request.addProperty("phoneNumber", "1472583691");
         request.addProperty("password", "Password123");

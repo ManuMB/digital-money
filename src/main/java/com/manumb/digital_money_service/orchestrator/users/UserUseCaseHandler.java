@@ -69,7 +69,7 @@ public class UserUseCaseHandler implements UserUseCaseOrchestrator {
     }
 
     @Override
-    public void enableUser(String token){
+    public void enableUser(String token) {
         String email = jwtService.extractUsername(token);
         userService.enableUser(email);
     }

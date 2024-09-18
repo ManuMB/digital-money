@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface UserSqlRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
+
     Optional<User> findByDni(String dni);
 
     @Transactional
@@ -37,5 +38,6 @@ public interface UserSqlRepository extends JpaRepository<User, Long> {
     void enableAppUser(String email);
 
     boolean existsByEmail(String email);
+
     boolean existsByDni(String dni);
 }

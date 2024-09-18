@@ -129,7 +129,7 @@ public class AccountController {
         return ResponseEntity.ok(transactions);
     }
 
-    @Operation(summary = "Obtener transaccion",
+    @Operation(summary = "Obtener transaccion por id",
             description = "Obtiene una transaccion por id.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
@@ -146,7 +146,7 @@ public class AccountController {
         return ResponseEntity.ok(transaction);
     }
 
-    @Operation(summary = "Obtener transacciones filtrando.",
+    @Operation(summary = "Filtrar transacciones",
             description = "Obtiene todas las transacciones de la cuenta donde el monto esté dentro de los valores indicados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
@@ -162,6 +162,13 @@ public class AccountController {
         return ResponseEntity.ok(transactions);
     }
 
+    @Operation(summary = "Descargar transacción en pdf",
+            description = "Descarga el detalle de una transacción en archivo pdf.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)})
     @GetMapping("/{transactionId}/pdf")
     public ResponseEntity<byte[]> getTransactionPdf(@Parameter(description = "ID de la cuenta", required = true) @NotNull @Positive @PathVariable Long accountId,
                                                     @Parameter(description = "ID de la transaccion", required = true) @NotNull @Positive @PathVariable Long transactionId) {

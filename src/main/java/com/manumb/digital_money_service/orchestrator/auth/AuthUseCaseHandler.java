@@ -55,14 +55,12 @@ public class AuthUseCaseHandler implements AuthUseCaseOrchestrator {
         //bring the user from DB
         //var user = userService.findByEmail(email);
 
-        //TODO Obtener la lista de cuentas asociados al usuario
 
         var extraClaims = jwtService.generateExtraClaimsOfUser(user);
 
         //generate token that after will be placed into response
         var jwt = jwtService.generateToken(extraClaims, user);
 
-        //TODO Devolver lista de cuentas asociadas ademas del jwt
         //create a response object
         return new ResponseUserLogin(jwt.getJwt());
     }

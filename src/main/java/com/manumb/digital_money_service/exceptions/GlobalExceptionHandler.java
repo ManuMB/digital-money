@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<String> handleBadRequestException(BadRequestException ex){
+    public ResponseEntity<String> handleBadRequestException(BadRequestException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
@@ -60,13 +60,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CardNotFoundException.class)
-    public ResponseEntity<String> handleCardNotFoundException(CardNotFoundException ex){
+    public ResponseEntity<String> handleCardNotFoundException(CardNotFoundException ex) {
         logger.error("Card not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(InsufficientBalanceException.class)
-    public ResponseEntity<String> handleInsufficientBalanceException(InsufficientBalanceException ex){
+    public ResponseEntity<String> handleInsufficientBalanceException(InsufficientBalanceException ex) {
         logger.error("Insufficient account balance: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.GONE).body(ex.getMessage());
     }
@@ -84,12 +84,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserExistsException.class)
-    public ResponseEntity<String> handleUserExistsException(UserExistsException ex){
+    public ResponseEntity<String> handleUserExistsException(UserExistsException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or dni already exist");
     }
 
     @ExceptionHandler(DestinationAccountNotFoundException.class)
-    public ResponseEntity<String> handleDestinationAccountNotFoundException(DestinationAccountNotFoundException ex){
+    public ResponseEntity<String> handleDestinationAccountNotFoundException(DestinationAccountNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 

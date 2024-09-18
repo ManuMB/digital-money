@@ -62,8 +62,7 @@ public class EmailServiceHandler implements SendEmail {
     }
 
 
-
-    private String processEmailForConfirmation(String fullName, String text){
+    private String processEmailForConfirmation(String fullName, String text) {
         String template = EmailTemplates.getConfirmEmailHtml();
         Map<String, String> variables = new HashMap<>();
         variables.put("name", fullName);
@@ -72,7 +71,7 @@ public class EmailServiceHandler implements SendEmail {
         return TemplateProcessor.processTemplate(template, variables);
     }
 
-    private String processEmailForPasswordChange(String fullName, String email, String text){
+    private String processEmailForPasswordChange(String fullName, String email, String text) {
         String template = EmailTemplates.getRecoverPasswordHtml();
         Map<String, String> variables = new HashMap<>();
         variables.put("name", fullName);

@@ -1,11 +1,11 @@
 package com.manumb.digital_money_service.business.users.services;
 
 import com.manumb.digital_money_service.business.accounts.Account;
+import com.manumb.digital_money_service.business.accounts.AccountService;
 import com.manumb.digital_money_service.business.security.exception.UserNotFoundException;
 import com.manumb.digital_money_service.business.users.User;
 import com.manumb.digital_money_service.business.users.UserService;
 import com.manumb.digital_money_service.business.users.exception.UserExistsException;
-import com.manumb.digital_money_service.persistence.AccountSqlRepository;
 import com.manumb.digital_money_service.persistence.UserSqlRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,20 +15,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.SecureRandom;
-import java.util.List;
-import java.util.Random;
 
 @Service
 @AllArgsConstructor
 public class UserServiceHandler implements UserService, UserDetailsService {
 
     private final UserSqlRepository userSqlRepository;
-    private final AccountSqlRepository accountSqlRepository;
+    private final AccountService accountService;
     private final PasswordEncoder passwordEncoder;
-    private final Random random = new SecureRandom();
 
 
     @Override
@@ -46,8 +40,8 @@ public class UserServiceHandler implements UserService, UserDetailsService {
         user.setPassword(hashedPassword);
 
         Account account = new Account();
-        account.setCvu(generateUniqueCVU());
-        account.setAlias(generateUniqueAlias());
+        account.setCvu(accountService.generateCVU());
+        account.setAlias(accountService.generateAlias());
         account.setBalance(0.0);
         user.setAccount(account);
         account.setUser(user);
@@ -56,7 +50,7 @@ public class UserServiceHandler implements UserService, UserDetailsService {
     }
 
     @Override
-    public void updateUser(Long id, String fullName, String dni, String email, String phoneNumber){
+    public void updateUser(Long id, String fullName, String dni, String email, String phoneNumber) {
         // Check if the user exists by ID first
         User existingUser = userSqlRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
@@ -116,34 +110,5 @@ public class UserServiceHandler implements UserService, UserDetailsService {
         return findByEmail(username);
     }
 
-    private String generateUniqueCVU() {
-        String cvu;
-        do {
-            cvu = generateRandomCVU();
-        } while (accountSqlRepository.existsByCvu(cvu));
-        return cvu;
-    }
 
-    private String generateRandomCVU() {
-        StringBuilder cvu = new StringBuilder(22);
-        for (int i = 0; i < 22; i++) {
-            cvu.append(random.nextInt(10));
-        }
-        return cvu.toString();
-    }
-
-    private String generateUniqueAlias() throws IOException {
-        String alias;
-        do {
-            alias = generateRandomAlias();
-        } while (accountSqlRepository.existsByAlias(alias));
-        return alias;
-    }
-
-    private String generateRandomAlias() throws IOException {
-        List<String> words = Files.readAllLines(Paths.get("src/main/java/com/manumb/digital_money_service/business/users/util/alias.txt"));
-        return words.get(random.nextInt(words.size())) + "." +
-                words.get(random.nextInt(words.size())) + "." +
-                words.get(random.nextInt(words.size()));
-    }
 }

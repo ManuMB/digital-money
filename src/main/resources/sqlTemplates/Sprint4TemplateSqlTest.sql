@@ -1,8 +1,8 @@
 INSERT INTO users(id, dni, email, enabled, full_name, password, phone_number) VALUES
-(1, '00000000000', 'test.user@email.com', true, 'Test User', '$2a$10$KGY8XLFNN0tmiE8n007xf.afciJ1DELvc4TK8x1kijo9pUNZdSI5u', '00000000');
+(1, '00000000', 'test.user@email.com', true, 'Test User', '$2a$10$KGY8XLFNN0tmiE8n007xf.afciJ1DELvc4TK8x1kijo9pUNZdSI5u', '00000000');
 
 INSERT INTO users(id, dni, email, enabled, full_name, password, phone_number) VALUES
-(2, '22222222222', 'juan.perez@email.com', true, 'Juan Perez', '$2a$10$KGY8XLFNN0tmiE8n007xf.afciJ1DELvc4TK8x1kijo9pUNZdSI5u', '11111111');
+(2, '22222222', 'juan.perez@email.com', true, 'Juan Perez', '$2a$10$KGY8XLFNN0tmiE8n007xf.afciJ1DELvc4TK8x1kijo9pUNZdSI5u', '11111111');
 
 INSERT INTO accounts(id, alias, balance, cvu, user_id) VALUES
 (1, 'TEST.USER.ALIAS', 5000.0, '11111111111', 1);

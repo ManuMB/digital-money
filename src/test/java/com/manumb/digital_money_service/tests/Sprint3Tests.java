@@ -58,7 +58,6 @@ public class Sprint3Tests {
     public void badGetAllTransactions_1(){
         given()
                 .header("Authorization", "DM-" + bearerToken)
-                //TODO
                 .get(accountUrl + "/" + "/activity")
                 .then()
                 .statusCode(400)

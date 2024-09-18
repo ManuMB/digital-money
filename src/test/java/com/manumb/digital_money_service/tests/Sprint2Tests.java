@@ -85,7 +85,7 @@ public class Sprint2Tests {
     public void getAccountInfo(){
         given()
                 .header("Authorization", "DM-" + bearerToken)
-                .get(userUrl + userId)
+                .get(accountUrl + accountId)
                 .then()
                 .statusCode(200)
                 .log().body();
@@ -270,7 +270,7 @@ public class Sprint2Tests {
     public void patchUserInfo() {
         JsonObject request = new JsonObject();
         request.addProperty("fullName", "Esteban Quito");
-        request.addProperty("dni", "99999999999");
+        request.addProperty("dni", "99999999");
         request.addProperty("email", "e.quito@gmail.com");
         request.addProperty("phoneNumber", "8888888888");
 
