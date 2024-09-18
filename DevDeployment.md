@@ -11,13 +11,7 @@ Sigue estos pasos para levantar el entorno de desarrollo:
    Utiliza el siguiente comando para levantar el servicio de la base de datos:
 
     ```bash
-    docker-compose up -d postgres
-    ```
-
-   **opcional levantar pgadmin**
-
-   ```bash
-    docker-compose up -d pgadmin
+    docker-compose up -d mysql
     ```
 
 
@@ -34,7 +28,7 @@ Sigue estos pasos para levantar el entorno de desarrollo:
    Finalmente, utiliza el siguiente comando para correr el servicio de la aplicación:
 
     ```bash
-    docker-compose up -d dm-system
+    docker-compose up -d dm-backend
     ```
 
 ## Alternativa: Usando el IDE
